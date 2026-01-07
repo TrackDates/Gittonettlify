@@ -1,7 +1,0 @@
-{
-  "name": "trackdates",
-  "private": true,
-  "dependencies": {
-    "@decapcms/netlify-cms-oauth-provider-node": "^1.1.0"
-  }
-}
