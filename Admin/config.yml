@@ -42,7 +42,6 @@ collections:
               - { label: "MOM Day", name: "momDay", widget: "number", required: false, value_type: "int" }
               - { label: "MOM Total", name: "momTotal", widget: "number", required: false, value_type: "int" }
               - { label: "Event page URL", name: "eventPageUrl", widget: "string", required: false }
-
               - label: "Sponsors (top = most important)"
                 name: "sponsors"
                 widget: "list"
