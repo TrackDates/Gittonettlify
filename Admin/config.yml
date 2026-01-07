@@ -2,10 +2,6 @@ backend:
   name: git-gateway
   branch: main
 
-  # Use Netlify's OAuth (recommended when hosting on Netlify)
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
-
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
 
@@ -22,7 +18,7 @@ collections:
             name: "locations"
             widget: "list"
             fields:
-              - { label: "ID", name: "id", widget: "string", hint: "Short key used by events (e.g. rad, car, sir)" }
+              - { label: "ID", name: "id", widget: "string" }
               - { label: "Name", name: "name", widget: "string" }
               - { label: "Latitude", name: "lat", widget: "number", value_type: "float" }
               - { label: "Longitude", name: "lon", widget: "number", value_type: "float" }
@@ -38,9 +34,9 @@ collections:
             summary: "{{fields.date}} — {{fields.eventName}}"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "Date (display)", name: "date", widget: "string", hint: "e.g., Jul 10 or TBD" }
+              - { label: "Date (display)", name: "date", widget: "string" }
               - { label: "Event name", name: "eventName", widget: "string" }
-              - { label: "Location ID", name: "locationId", widget: "string", hint: "Must match a Locations ID" }
+              - { label: "Location ID", name: "locationId", widget: "string" }
               - { label: "Payout", name: "payout", widget: "string", required: false, default: "TBD" }
               - { label: "Type", name: "type", widget: "select", options: ["standard", "dragdrive"], default: "standard" }
               - { label: "MOM Day", name: "momDay", widget: "number", required: false, value_type: "int" }
