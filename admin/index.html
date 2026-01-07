@@ -4,40 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TrackDates Admin</title>
-
-    <!-- Manual init so we can hard-load config.yml (no cache weirdness) -->
-    <script>
-      window.CMS_MANUAL_INIT = true;
-    </script>
-
-    <!-- YAML parser for config.yml -->
-    <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms-app@^3.0.0/dist/decap-cms-app.js"></script>
-
-    <script>
-      (async function () {
-        try {
-          // Force fresh config load every time (kills 304/cached config issues)
-          const res = await fetch("/admin/config.yml?cb=" + Date.now(), { cache: "no-store" });
-          if (!res.ok) throw new Error("Could not load /admin/config.yml (" + res.status + ")");
-
-          const ymlText = await res.text();
-          const config = window.jsyaml.load(ymlText);
-
-          console.log("Decap backend:", config?.backend);
-
-          // If you still see Netlify Identity after this, your deployed config.yml is NOT the one you think it is.
-          CMS.init({ config });
-        } catch (err) {
-          console.error(err);
-          document.body.innerHTML =
-            `<pre style="padding:16px;background:#111;color:#fff;white-space:pre-wrap;">` +
-            `Admin failed to start.\n\n${(err && err.stack) ? err.stack : err}` +
-            `</pre>`;
-        }
-      })();
-    </script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
