@@ -5,38 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>TrackDates Admin</title>
-
-    <!-- REQUIRED for invite / recovery password set flow -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-    <!-- Decap CMS -->
-    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </head>
-
   <body>
-    <script>
-      (function () {
-        if (!window.netlifyIdentity) return;
-
-        const hash = window.location.hash || "";
-        const hasToken =
-          hash.includes("invite_token=") ||
-          hash.includes("recovery_token=") ||
-          hash.includes("confirmation_token=") ||
-          hash.includes("email_change_token=");
-
-        window.netlifyIdentity.on("init", (user) => {
-          // If an invite/recovery token is present, open the widget so user can set password
-          if (hasToken) window.netlifyIdentity.open();
-
-          // Nice UX: after login, stay in /admin
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      })();
-    </script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
