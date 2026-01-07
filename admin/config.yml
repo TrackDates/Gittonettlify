@@ -2,9 +2,7 @@ backend:
   name: github
   repo: TrackDates/Gittonettlify
   branch: main
-  # These are the defaults for GitHub on Netlify, but keeping them explicit is fine:
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
+  auth_scope: repo
 
 publish_mode: simple
 
