@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: TrackDates/Gittonettlify
+  name: git-gateway
   branch: main
 
   # Use Netlify's OAuth (recommended when hosting on Netlify)
