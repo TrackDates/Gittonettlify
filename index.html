@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TrackDates.ca — 2026 Western Drag Racing Map</title>
@@ -638,6 +640,17 @@
     }
   </style>
 </head>
+<script>
+  (function () {
+    if (!window.netlifyIdentity) return;
+
+    // If an invite lands on the homepage, forward it to /admin
+    if (window.location.hash && window.location.hash.includes("invite_token=")) {
+      window.location.replace("/admin/" + window.location.hash);
+    }
+  })();
+</script>
+
 <body>
   <header>
     <div class="topbar">
