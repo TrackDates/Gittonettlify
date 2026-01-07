@@ -4,8 +4,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TrackDates Admin</title>
+
+    <!-- Netlify Identity (required for invites/reset/password flows) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
+    <script>
+      // If we land here from an invite/recovery/confirmation email, open the Identity modal.
+      (function () {
+        if (!window.netlifyIdentity) return;
+
+        const hash = window.location.hash || "";
+        const hasToken =
+          hash.includes("invite_token=") ||
+          hash.includes("recovery_token=") ||
+          hash.includes("confirmation_token=") ||
+          hash.includes("email_change_token=");
+
+        window.netlifyIdentity.on("init", function () {
+          if (hasToken) {
+            // Let the widget handle the token automatically.
+            window.netlifyIdentity.open();
+          }
+        });
+
+        // Optional: after login, keep them in /admin
+        window.netlifyIdentity.on("login", function () {
+          document.location.href = "/admin/";
+        });
+      })();
+    </script>
+
+    <!-- Decap CMS -->
     <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
 </html>
