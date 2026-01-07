@@ -1520,6 +1520,24 @@
     <input name="source_link" />
     <input name="requester_email" />
   </form>
+  
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  (function () {
+    const hash = window.location.hash || "";
+    const hasToken =
+      hash.includes("invite_token=") ||
+      hash.includes("recovery_token=") ||
+      hash.includes("confirmation_token=") ||
+      hash.includes("email_change_token=");
 
+    // Identity emails point to site root for many setups; move the token to /admin so Decap can handle it.
+    if (hasToken && !window.location.pathname.startsWith("/admin")) {
+      window.location.replace("/admin/" + hash);
+    }
+  })();
+</script>
+ 
 </body>
 </html>
+
