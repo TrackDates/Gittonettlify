@@ -1,51 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: TrackDates/Gittonettlify
   branch: main
-
-media_folder: "assets/uploads"
-public_folder: "/assets/uploads"
-
-collections:
-  - name: "trackdates"
-    label: "TrackDates Data"
-    files:
-      - file: "data/locations.json"
-        label: "Locations"
-        name: "locations"
-        format: "json"
-        fields:
-          - label: "Locations"
-            name: "locations"
-            widget: "list"
-            fields:
-              - { label: "ID", name: "id", widget: "string" }
-              - { label: "Name", name: "name", widget: "string" }
-              - { label: "Latitude", name: "lat", widget: "number", value_type: "float" }
-              - { label: "Longitude", name: "lon", widget: "number", value_type: "float" }
-
-      - file: "data/events-2026.json"
-        label: "Events (2026)"
-        name: "events_2026"
-        format: "json"
-        fields:
-          - label: "Events"
-            name: "events"
-            widget: "list"
-            summary: "{{fields.date}} — {{fields.eventName}}"
-            fields:
-              - { label: "ID", name: "id", widget: "string" }
-              - { label: "Date (display)", name: "date", widget: "string" }
-              - { label: "Event name", name: "eventName", widget: "string" }
-              - { label: "Location ID", name: "locationId", widget: "string" }
-              - { label: "Payout", name: "payout", widget: "string", required: false, default: "TBD" }
-              - { label: "Type", name: "type", widget: "select", options: ["standard", "dragdrive"], default: "standard" }
-              - { label: "MOM Day", name: "momDay", widget: "number", required: false, value_type: "int" }
-              - { label: "MOM Total", name: "momTotal", widget: "number", required: false, value_type: "int" }
-              - { label: "Event page URL", name: "eventPageUrl", widget: "string", required: false }
-              - label: "Sponsors (top = most important)"
-                name: "sponsors"
-                widget: "list"
-                required: false
-                fields:
-                  - { label: "Sponsor name", name: "name", widget: "string" }
-                  - { label: "Sponsor URL", name: "url", widget: "string" }
+  base_url: https://trackdates2026.netlify.app
+  auth_endpoint: /.netlify/functions/auth
