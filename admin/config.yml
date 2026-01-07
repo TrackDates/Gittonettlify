@@ -2,6 +2,8 @@ backend:
   name: github
   repo: TrackDates/Gittonettlify
   branch: main
+
+  # Netlify OAuth provider (GitHub login, not Netlify Identity)
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
