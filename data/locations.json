@@ -1,0 +1,17 @@
+{
+  "locations": [
+    { "id": "area53", "name": "Area 53 Raceway (Forestburg, AB)", "lat": 52.5757, "lon": -112.0892 },
+    { "id": "beaver", "name": "NAPA Auto Parts Raceway (Beaverlodge, AB)", "lat": 55.183833, "lon": -119.44183 },
+    { "id": "car", "name": "Central Alberta Raceways (C.A.R.S) — Rimbey, AB", "lat": 52.6521, "lon": -114.2207 },
+    { "id": "lillooet", "name": "Lillooet, BC", "lat": 50.6863017, "lon": -121.9367502 },
+    { "id": "mhdra", "name": "Medicine Hat Drag Racing Association (MHDRA)", "lat": 50.09421, "lon": -110.747767 },
+    { "id": "mission", "name": "Mission Raceway Park (Mission, BC)", "lat": 49.126389, "lon": -122.325278 },
+    { "id": "rad", "name": "RAD Torque Raceway (Nisku, AB)", "lat": 53.3374847, "lon": -113.5330582 },
+    { "id": "shadyside", "name": "Shadyside Dragway (Shelby, NC)", "lat": 35.2146, "lon": -81.6428 },
+    { "id": "sir", "name": "Saskatchewan International Raceway (SIR) — Saskatoon area", "lat": 51.9708, "lon": -106.5428 },
+    { "id": "threehills", "name": "Three Hills, AB", "lat": 51.70712, "lon": -113.2648644 },
+    { "id": "txmotorplex", "name": "Texas Motorplex (Ennis, TX)", "lat": 32.329144, "lon": -96.716788 },
+    { "id": "vegas", "name": "Las Vegas Motor Speedway (Las Vegas, NV)", "lat": 36.273889, "lon": -115.011389 },
+    { "id": "yellowstone", "name": "Yellowstone Drag Strip (Acton, MT)", "lat": 45.934, "lon": -108.7543 }
+  ]
+}
