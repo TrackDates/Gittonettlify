@@ -2,8 +2,6 @@ backend:
   name: github
   repo: TrackDates/Gittonettlify
   branch: main
-
-  # Netlify OAuth (works when hosted on Netlify)
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
