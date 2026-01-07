@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrackDates.ca — 2026 Western Drag Racing Map</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --panel: rgba(18,18,22,.92);
+      --ink:#e9e9ee;
+      --muted: rgba(233,233,238,.72);
+      --accent:#ff3c00;
+      --line: rgba(255,60,0,.55);
+
+      --mom:#b8ff2c;          /* Drag & Drive */
+      --momLine: rgba(184,255,44,.75);
+
+      --cardLine: rgba(255,255,255,.08);
+
+      --linkBlue: #4fb3ff;
+      --linkBlueGlow: rgba(79,179,255,.25);
+    }
+
+    * { box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family:"Orbitron", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    header{
+      position: sticky;
+      top:0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(10,10,12,.98), rgba(10,10,12,.78));
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction: column;
+      gap:4px;
+      min-width:0;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size: 18px;
+      color: var(--accent);
+      letter-spacing: .6px;
+      text-shadow: 0 0 12px rgba(255,60,0,.55);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      border: 1px solid var(--line);
+      background: rgba(255,60,0,.08);
+      color: var(--ink);
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: .3px;
+      transition: transform .08s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ background: rgba(255,60,0,.13); }
+    .btn:active{ transform: translateY(1px); }
+
+    .btn.secondary{
+      border: 1px solid var(--cardLine);
+      background: rgba(255,255,255,.04);
+    }
+    .btn.secondary:hover{ background: rgba(255,255,255,.06); }
+
+    .btn.momOn{
+      border-color: rgba(184,255,44,.50);
+      background: rgba(184,255,44,.08);
+      box-shadow: 0 0 14px rgba(184,255,44,.12);
+    }
+
+    #layout{
+      display:grid;
+      grid-template-columns: 360px 1fr 360px;
+      height: calc(100vh - 58px);
+      width: 100%;
+    }
+
+    aside{
+      border-right: 1px solid var(--cardLine);
+      background: rgba(10,10,12,.88);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      display:flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .sideHead{
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid var(--cardLine);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .searchRow{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+    }
+
+    .searchRow input{
+      width: 100%;
+      padding: 10px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--cardLine);
+      background: rgba(255,255,255,.03);
+      color: var(--ink);
+      outline: none;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: .2px;
+    }
+
+    .legend{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--muted);
+      align-items:center;
+    }
+    .dot{
+      display:inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-right: 6px;
+      vertical-align: -1px;
+      box-shadow: 0 0 10px rgba(255,255,255,.08);
+    }
+    .dot.red{ background: var(--accent); }
+    .dot.green{ background: var(--mom); }
+
+    .lineKey{
+      display:inline-block;
+      width: 22px;
+      height: 3px;
+      background: var(--momLine);
+      border-radius: 999px;
+      margin-right: 6px;
+      vertical-align: 2px;
+      box-shadow: 0 0 10px rgba(184,255,44,.18);
+    }
+
+    .list{
+      overflow:auto;
+      padding: 10px 12px 18px;
+    }
+
+    .month{
+      margin: 14px 0 8px;
+      padding: 8px 10px;
+      border: 1px solid var(--cardLine);
+      background: rgba(255,255,255,.03);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--ink);
+      letter-spacing: .4px;
+    }
+
+    .item{
+      border: 1px solid var(--cardLine);
+      background: rgba(255,255,255,.03);
+      border-radius: 12px;
+      padding: 10px 10px;
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease;
+      margin-bottom: 10px;
+    }
+
+    .item:hover{
+      background: rgba(255,255,255,.05);
+      border-color: rgba(255,255,255,.12);
+    }
+
+    .itemTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .itemTitle{
+      font-size: 12px;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+
+    .tag{
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--cardLine);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .tag.mom{
+      border-color: rgba(184,255,44,.65);
+      color: rgba(220,255,170,.95);
+      background: rgba(184,255,44,.08);
+    }
+
+    .meta{
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+
+    .linkBtn{
+      font-size: 11px;
+      color: rgba(255,255,255,.80);
+      text-decoration: none;
+      border: none;
+      background: transparent;
+      border-bottom: 1px dashed rgba(255,255,255,.25);
+      padding: 0 0 1px 0;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .linkBtn:hover{
+      color: #fff;
+      border-bottom-color: rgba(255,255,255,.5);
+    }
+
+    #map{ height: 100%; width: 100%; }
+
+    .leaflet-popup-content-wrapper{
+      background: var(--panel);
+      color: var(--ink);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 0 18px rgba(0,0,0,.45);
+      border-radius: 14px;
+    }
+    .leaflet-popup-tip{
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .popupTitle{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .badge{
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .popupList{
+      margin: 0;
+      padding-left: 18px;
+    }
+    .popupList li{
+      margin: 7px 0;
+      line-height: 1.25;
+      font-size: 12px;
+    }
+
+    .date{
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .date.mom{
+      color: var(--mom);
+      text-shadow: 0 0 10px rgba(184,255,44,.25);
+    }
+
+    .miniTag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+    .miniTag.mom{
+      border-color: rgba(184,255,44,.65);
+      background: rgba(184,255,44,.08);
+      color: rgba(220,255,170,.95);
+    }
+
+    .tinyRow{
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    .momPin{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(184,255,44,.75);
+      background: rgba(184,255,44,.10);
+      color: rgba(220,255,170,.98);
+      font-size: 11px;
+      letter-spacing: .2px;
+      box-shadow: 0 0 14px rgba(184,255,44,.20);
+      transform: translate(10px, -18px);
+      user-select:none;
+    }
+
+    /* Right-side event details */
+    #details{
+      border-left: 1px solid var(--cardLine);
+      background: rgba(10,10,12,.88);
+      backdrop-filter: blur(10px);
+      overflow: auto;
+      padding: 12px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .detailsCard{
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .detailsTitle{
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .detailsTitle strong{
+      font-size: 13px;
+      letter-spacing: .2px;
+      line-height: 1.2;
+    }
+
+    .detailsMeta{
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .eventLink{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      margin-top: 10px;
+      color: var(--linkBlue);
+      text-decoration: none;
+      font-size: 12px;
+      border: 1px solid rgba(79,179,255,.28);
+      background: rgba(79,179,255,.08);
+      padding: 8px 10px;
+      border-radius: 12px;
+      box-shadow: 0 0 18px var(--linkBlueGlow);
+      width: fit-content;
+    }
+    .eventLink:hover{
+      background: rgba(79,179,255,.12);
+      border-color: rgba(79,179,255,.38);
+      color: #bfe6ff;
+    }
+
+    .sponsorList{
+      margin-top: 10px;
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sponsorItem{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      text-decoration: none;
+      color: rgba(255,255,255,.92);
+      font-size: 12px;
+    }
+
+    .sponsorItem small{
+      color: rgba(255,255,255,.62);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .sponsorFeatured{
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 0 18px rgba(255,255,255,.06);
+    }
+
+    .sponsorRank{
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.70);
+      white-space: nowrap;
+    }
+
+    .submitWrap{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1100;
+      width: min(360px, calc(100vw - 28px));
+    }
+
+    .submitPanel{
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,12,.86);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(0,0,0,.45);
+    }
+
+    .submitHeader{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+
+    .submitHeader strong{
+      font-size: 12px;
+      letter-spacing: .3px;
+    }
+
+    .toggle{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--ink);
+      padding: 6px 8px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    form{
+      display:none;
+      padding: 12px;
+      gap: 10px;
+    }
+    form.open{ display: grid; }
+
+    label{
+      font-size: 11px;
+      color: var(--muted);
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    input, textarea{
+      padding: 10px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      color: var(--ink);
+      outline: none;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: .2px;
+      resize: vertical;
+    }
+
+    .formRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hint{
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .formActions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .status{
+      font-size: 11px;
+      color: rgba(233,233,238,.85);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius: 12px;
+      padding: 8px 10px;
+      line-height: 1.25;
+      display:none;
+    }
+    .status.show{ display:block; }
+    .status.ok{ border-color: rgba(184,255,44,.35); }
+    .status.err{ border-color: rgba(255,60,0,.45); }
+
+    .hp { display:none !important; }
+
+    .modal{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display:none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal.show{ display:flex; }
+    .modalCard{
+      width: min(520px, calc(100vw - 32px));
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,12,.92);
+      border-radius: 16px;
+      overflow:hidden;
+      box-shadow: 0 0 24px rgba(0,0,0,.55);
+    }
+    .modalHead{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .modalHead strong{ font-size: 12px; letter-spacing:.3px; }
+    .closeX{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--ink);
+      padding: 6px 10px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-family: inherit;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1100px){
+      #layout{ grid-template-columns: 1fr; }
+      aside{ display:none; }
+      #details{ display:none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <h1>TrackDates.ca — 2026 Schedule</h1>
+        <div class="sub" id="summary">Loading…</div>
+      </div>
+      <div class="controls">
+        <button class="btn secondary momOn" id="btnToggleMomLines">Drag &amp; Drive lines: On</button>
+        <button class="btn" id="btnFitAll">Fit all</button>
+        <button class="btn" id="btnFocusWest">Focus west</button>
+        <button class="btn secondary" id="btnToggleSidebar">Toggle list</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="layout">
+    <aside id="sidebar">
+      <div class="sideHead">
+        <div class="searchRow">
+          <input id="search" placeholder="Search event / track / city…" />
+        </div>
+        <div class="legend">
+          <span><span class="dot red"></span>Standard race</span>
+          <span><span class="dot green"></span>Mile of Mayhem stop</span>
+          <span><span class="lineKey"></span>MOM driving route</span>
+        </div>
+      </div>
+      <div class="list" id="eventList"></div>
+    </aside>
+
+    <div id="map"></div>
+
+    <div id="details">
+      <div class="detailsCard">
+        <div class="detailsTitle">
+          <strong>Event details</strong>
+          <span class="tag">Select an event</span>
+        </div>
+        <div class="detailsMeta">
+          Click an event from the left list or a track marker on the map.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit panel -->
+  <div class="submitWrap">
+    <div class="submitPanel">
+      <div class="submitHeader">
+        <strong>Submit a new event (approval required)</strong>
+        <button class="toggle" id="toggleSubmit">Open</button>
+      </div>
+
+      <!-- Netlify Forms: New Event Submission -->
+      <form id="submitForm"
+        name="event-submission"
+        method="POST"
+        action="/"
+        netlify
+        data-netlify="true"
+        data-netlify-honeypot="bot-field">
+
+        <input type="hidden" name="form-name" value="event-submission" />
+        <div class="hp">
+          <label>Don’t fill this out: <input name="bot-field" /></label>
+        </div>
+
+        <div id="submitStatus" class="status"></div>
+
+        <label>
+          Event name
+          <input id="fName" name="event_name" placeholder="e.g., Big Tire Bash" required />
+        </label>
+
+        <div class="formRow">
+          <label>
+            Event location
+            <input id="fLocation" name="event_location" placeholder="Track name + city/province/state" required />
+          </label>
+          <label>
+            Event dates
+            <input id="fDates" name="event_dates" placeholder="e.g., July 10-12, 2026" required />
+          </label>
+        </div>
+
+        <label>
+          Link to event page
+          <input id="fEventPage" name="event_page_url" placeholder="https://..." />
+        </label>
+
+        <label>
+          Classes (not shown on map)
+          <textarea id="fClasses" name="classes" rows="3" placeholder="List classes / categories here"></textarea>
+        </label>
+
+        <label>
+          Payout (shown on map)
+          <input id="fPayout" name="payout" placeholder="e.g., $5,000 to win / TBD" />
+        </label>
+
+        <label>
+          Your email (optional)
+          <input id="fEmail" name="submitter_email" type="email" placeholder="so we can follow up if needed" />
+        </label>
+
+        <div class="hint">
+          Submissions go to TrackDates.ca admin for approval before appearing on the map.
+        </div>
+
+        <div class="formActions">
+          <button class="btn secondary" type="button" id="btnClear">Clear</button>
+          <button class="btn" type="submit" id="btnSubmitEvent">Submit for approval</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Request Modal (Netlify Form) -->
+  <div class="modal" id="editModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalHead">
+        <strong>Request an edit (emails admin for approval)</strong>
+        <button class="closeX" id="closeEditModal">Close</button>
+      </div>
+
+      <form id="editForm"
+        name="event-edit-request"
+        method="POST"
+        action="/"
+        netlify
+        data-netlify="true"
+        data-netlify-honeypot="bot-field-edit">
+
+        <input type="hidden" name="form-name" value="event-edit-request" />
+        <input type="hidden" id="eEventId" name="event_id" />
+        <input type="hidden" id="eSnapshot" name="event_snapshot" />
+        <input type="hidden" id="eMapUrl" name="map_url" />
+
+        <div class="hp">
+          <label>Don’t fill this out: <input name="bot-field-edit" /></label>
+        </div>
+
+        <div id="editStatus" class="status"></div>
+
+        <div class="formRow">
+          <label>
+            Event name
+            <input id="eEventName" name="event_name" readonly />
+          </label>
+          <label>
+            Track
+            <input id="eLocationName" name="event_location" readonly />
+          </label>
+        </div>
+
+        <div class="formRow">
+          <label>
+            Current date
+            <input id="eCurrentDate" name="current_date" readonly />
+          </label>
+          <label>
+            Current payout
+            <input id="eCurrentPayout" name="current_payout" readonly />
+          </label>
+        </div>
+
+        <label>
+          What should be changed?
+          <textarea id="eRequestedChange" name="requested_change" rows="4" placeholder="Example: date should be Aug 14-16; payout updated to $7,500 to win" required></textarea>
+        </label>
+
+        <label>
+          Source link (optional)
+          <input id="eSourceLink" name="source_link" placeholder="Facebook post / flyer / website link" />
+        </label>
+
+        <label>
+          Your email (optional)
+          <input id="eContactEmail" name="requester_email" type="email" placeholder="so we can follow up if needed" />
+        </label>
+
+        <div class="formActions">
+          <button class="btn secondary" type="button" id="btnEditClear">Clear</button>
+          <button class="btn" type="submit" id="btnSubmitEdit">Send edit request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Tracks / locations
+    // =========================
+    // Data (loaded from JSON for admin panel)
+    // =========================
+    let locations = {};
+    let events = [];
+
+    async function loadData() {
+      const [locRes, evtRes] = await Promise.all([
+        fetch("/data/locations.json", { cache: "no-store" }),
+        fetch("/data/events-2026.json", { cache: "no-store" })
+      ]);
+
+      if (!locRes.ok) throw new Error("Failed to load /data/locations.json");
+      if (!evtRes.ok) throw new Error("Failed to load /data/events-2026.json");
+
+      const locJson = await locRes.json();
+      const evtJson = await evtRes.json();
+
+      const locList = Array.isArray(locJson?.locations) ? locJson.locations : [];
+      locations = {};
+      for (const l of locList) {
+        if (!l || !l.id) continue;
+        const lat = Number(l.lat);
+        const lon = Number(l.lon);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+        locations[String(l.id)] = {
+          name: String(l.name ?? l.id),
+          lat,
+          lon
+        };
+      }
+
+      events = Array.isArray(evtJson?.events) ? evtJson.events : [];
+    }
+
+    async function startApp() {
+      try {
+        await loadData();
+      } catch (err) {
+        console.error(err);
+        const summary = document.getElementById("summary");
+        if (summary) summary.textContent = "Could not load event data. Please refresh.";
+        return;
+      }
+
+    // ===== Date helpers =====
+    const monthIndex = {
+      jan:0, january:0, feb:1, february:1, mar:2, march:2, apr:3, april:3, may:4,
+      jun:5, june:5, jul:6, july:6, aug:7, august:7, sep:8, sept:8, september:8,
+      oct:9, october:9, nov:10, november:10, dec:11, december:11
+    };
+
+    function dateSortKey(dateStr){
+      if (!dateStr) return Number.POSITIVE_INFINITY;
+      const d = String(dateStr).trim();
+      if (d.toLowerCase() === "tbd" || d === "???") return Number.POSITIVE_INFINITY;
+
+      const parts = d.split(/\s+/);
+      if (parts.length < 2) return Number.POSITIVE_INFINITY;
+
+      const m = monthIndex[parts[0].toLowerCase()];
+      if (m === undefined) return Number.POSITIVE_INFINITY;
+
+      const day = parseInt(String(parts[1]).split("-")[0], 10);
+      if (!Number.isFinite(day)) return Number.POSITIVE_INFINITY;
+
+      return new Date(2026, m, day).getTime();
+    }
+
+    function monthNameFromDateStr(dateStr){
+      if (!dateStr) return "TBD";
+      const d = String(dateStr).trim();
+      if (d.toLowerCase() === "tbd") return "TBD";
+      const m = d.split(/\s+/)[0]?.toLowerCase();
+      const map = {
+        jan:"January", january:"January", feb:"February", february:"February", mar:"March", march:"March",
+        apr:"April", april:"April", may:"May", jun:"June", june:"June", jul:"July", july:"July",
+        aug:"August", august:"August", sep:"September", sept:"September", september:"September",
+        oct:"October", october:"October", nov:"November", november:"November", dec:"December", december:"December"
+      };
+      return map[m] || "TBD";
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function normalizeUrl(url){
+      const u = String(url || "").trim();
+      if (!u) return "";
+      if (u.startsWith("http://") || u.startsWith("https://")) return u;
+      return "https://" + u.replace(/^www\./, "www.");
+    }
+
+    // =========================
+    // Netlify Forms (AJAX submit helper)
+    // =========================
+    function encodeFormData(form) {
+      const fd = new FormData(form);
+      return new URLSearchParams(fd).toString();
+    }
+
+    async function submitNetlifyForm(form, statusEl, submitBtn, successMsg) {
+      statusEl.className = "status show";
+      statusEl.textContent = "Submitting…";
+
+      if (submitBtn) submitBtn.disabled = true;
+
+      try {
+        const body = encodeFormData(form);
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body
+        });
+        if (!res.ok) throw new Error("Network error");
+
+        statusEl.className = "status show ok";
+        statusEl.textContent = successMsg || "Submitted! Thanks — we'll review it soon.";
+        form.reset();
+
+        return true;
+      } catch (e) {
+        statusEl.className = "status show err";
+        statusEl.textContent = "Submission failed. Please try again in a moment.";
+        return false;
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    }
+
+    // =========================
+    // Map init
+    // =========================
+    const map = L.map("map", { zoomControl: true, preferCanvas: true });
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+    }).addTo(map);
+
+    // Group events by location (ONE marker per location, exact coords)
+    const eventsByLocation = {};
+    for (const e of events){
+      if (!eventsByLocation[e.locationId]) eventsByLocation[e.locationId] = [];
+      eventsByLocation[e.locationId].push(e);
+    }
+
+    let highlightedEventId = null;
+    const markers = [];
+    const markerByLocation = new Map();
+
+    // ===== Right-side details panel =====
+    const detailsEl = document.getElementById("details");
+
+    function sponsorBgByRank(rankIndex){
+      // rankIndex: 0 is top/most important
+      const steps = [
+        { bg: "rgba(255,215,0,.12)", border: "rgba(255,215,0,.30)" },    // gold-ish
+        { bg: "rgba(160,220,255,.10)", border: "rgba(160,220,255,.26)" }, // cool blue
+        { bg: "rgba(255,140,0,.10)", border: "rgba(255,140,0,.24)" },     // orange
+        { bg: "rgba(184,255,44,.08)", border: "rgba(184,255,44,.20)" },   // mom green
+        { bg: "rgba(255,255,255,.05)", border: "rgba(255,255,255,.12)" }  // default
+      ];
+      return steps[Math.min(rankIndex, steps.length-1)];
+    }
+
+    function showEventDetails(evt){
+      const locName = locations[evt.locationId]?.name || evt.locationId;
+      const payout = evt.payout || "TBD";
+      const isMom = evt.type === "dragdrive";
+
+      const eventPageUrl = normalizeUrl(evt.eventPageUrl || "");
+      const sponsors = Array.isArray(evt.sponsors) ? evt.sponsors : [];
+
+      let sponsorsHtml = `<div class="detailsMeta" style="margin-top:8px;">No sponsors listed yet.</div>`;
+      if (sponsors.length){
+        const items = sponsors.map((s, idx) => {
+          const name = escapeHtml(s?.name || "Sponsor");
+          const url = normalizeUrl(s?.url || "");
+          const safeUrl = escapeHtml(url);
+          const styles = sponsorBgByRank(idx);
+          const featured = idx < 3;
+
+          return `
+            <a class="sponsorItem ${featured ? "sponsorFeatured" : ""}"
+               href="${safeUrl || "#"}"
+               target="_blank"
+               rel="noopener"
+               style="background:${styles.bg}; border-color:${styles.border};">
+              <span>${name}</span>
+              <span class="sponsorRank">${featured ? "Featured" : `Sponsor #${idx+1}`}</span>
+            </a>
+          `;
+        }).join("");
+
+        sponsorsHtml = `
+          <div class="detailsMeta" style="margin-top:10px; font-weight:600; color:rgba(255,255,255,.86)">Sponsors</div>
+          <div class="sponsorList">${items}</div>
+        `;
+      }
+
+      detailsEl.innerHTML = `
+        <div class="detailsCard">
+          <div class="detailsTitle">
+            <strong>${escapeHtml(evt.date)} — ${escapeHtml(evt.eventName)}</strong>
+            <span class="tag ${isMom ? "mom" : ""}">${isMom ? "MOM" : "Race"}</span>
+          </div>
+          <div class="detailsMeta">
+            ${escapeHtml(locName)}<br/>
+            Payout: ${escapeHtml(payout)}
+          </div>
+
+          ${
+            eventPageUrl
+              ? `<a class="eventLink" href="${escapeHtml(eventPageUrl)}" target="_blank" rel="noopener">
+                   Link to event page
+                 </a>`
+              : `<div class="detailsMeta" style="margin-top:10px;">No event page link yet.</div>`
+          }
+
+          ${sponsorsHtml}
+        </div>
+      `;
+    }
+
+    // ===== Edit modal wiring =====
+    const editModal = document.getElementById("editModal");
+    const closeEditModalBtn = document.getElementById("closeEditModal");
+
+    function openEditModal(evt){
+      const locName = locations[evt.locationId]?.name || evt.locationId;
+
+      document.getElementById("eEventName").value = evt.eventName || "";
+      document.getElementById("eLocationName").value = locName;
+      document.getElementById("eCurrentDate").value = evt.date || "";
+      document.getElementById("eCurrentPayout").value = (evt.payout || "TBD");
+
+      document.getElementById("eEventId").value = (evt.id || "");
+      document.getElementById("eMapUrl").value = (location.href || "");
+      document.getElementById("eSnapshot").value = (
+        `Event ID: ${evt.id || ""}\n` +
+        `Event: ${evt.eventName || ""}\n` +
+        `Track: ${locName}\n` +
+        `Date: ${evt.date || ""}\n` +
+        `Payout: ${(evt.payout || "TBD")}\n` +
+        `Type: ${(evt.type || "")}\n` +
+        `Event Page: ${(evt.eventPageUrl || "")}`
+      );
+
+      document.getElementById("eRequestedChange").value = "";
+      document.getElementById("eSourceLink").value = "";
+      document.getElementById("eContactEmail").value = "";
+
+      const editStatus = document.getElementById("editStatus");
+      editStatus.className = "status";
+      editStatus.textContent = "";
+
+      editModal.classList.add("show");
+      editModal.setAttribute("aria-hidden", "false");
+      setTimeout(() => document.getElementById("eRequestedChange").focus(), 50);
+    }
+
+    function closeEditModal(){
+      editModal.classList.remove("show");
+      editModal.setAttribute("aria-hidden", "true");
+    }
+
+    closeEditModalBtn.addEventListener("click", closeEditModal);
+    editModal.addEventListener("click", (e) => {
+      if (e.target === editModal) closeEditModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && editModal.classList.contains("show")) closeEditModal();
+    });
+
+    function buildPopupHtml(locationId){
+      const loc = locations[locationId];
+      const evts = (eventsByLocation[locationId] || []).slice()
+        .sort((a,b) => dateSortKey(a.date) - dateSortKey(b.date));
+
+      const items = evts.map(e => {
+        const isHighlight = e.id === highlightedEventId;
+        const isMom = e.type === "dragdrive";
+        const dateClass = isMom ? "date mom" : "date";
+        const payout = e.payout || "TBD";
+
+        const momBadge = isMom && e.momDay && e.momTotal
+          ? `<span class="miniTag mom">MOM ${e.momDay}/${e.momTotal}</span>`
+          : "";
+
+        const eventPageUrl = normalizeUrl(e.eventPageUrl || "");
+        const eventLink = eventPageUrl
+          ? `<a href="${escapeHtml(eventPageUrl)}" target="_blank" rel="noopener" style="color:var(--linkBlue); text-decoration:none;">Event page</a>`
+          : `<span style="color:rgba(255,255,255,.55)">No event page</span>`;
+
+        return `
+          <li style="${isHighlight ? "background:rgba(255,255,255,.06); border-radius:10px; padding:6px 8px; margin-left:-8px;" : ""}">
+            <span class="${dateClass}">${escapeHtml(e.date)}</span>
+            — <span>${escapeHtml(e.eventName)}</span>
+            ${momBadge}
+            <div style="margin-top:4px; font-size:11px; color:rgba(255,255,255,.72)">
+              <span class="payout">Payout: ${escapeHtml(payout)}</span>
+              &nbsp;·&nbsp;
+              ${eventLink}
+              &nbsp;·&nbsp;
+              <button class="linkBtn" data-edit-id="${escapeHtml(e.id)}" type="button">Request edit</button>
+            </div>
+          </li>
+        `;
+      }).join("");
+
+      return `
+        <div>
+          <div class="popupTitle">
+            <div>${escapeHtml(loc?.name || locationId)}</div>
+            <div class="badge">${evts.length} event${evts.length===1?"":"s"}</div>
+          </div>
+          <ul class="popupList">${items}</ul>
+          <div class="tinyRow"><span>Track marker</span></div>
+        </div>
+      `;
+    }
+
+    // Create standard (red) markers at exact track coordinates
+    for (const locationId of Object.keys(eventsByLocation)){
+      const loc = locations[locationId];
+      if (!loc) continue;
+
+      const marker = L.circleMarker([loc.lat, loc.lon], {
+        radius: 9,
+        weight: 2,
+        color: "#ff3c00",
+        fillColor: "#ff3c00",
+        fillOpacity: 0.22
+      }).addTo(map);
+
+      marker.bindPopup(buildPopupHtml(locationId), { maxWidth: 420 });
+
+      marker.on("popupopen", (ev) => {
+        marker.setPopupContent(buildPopupHtml(locationId));
+
+        const popupEl = ev.popup.getElement();
+        if (!popupEl) return;
+
+        popupEl.querySelectorAll("[data-edit-id]").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute("data-edit-id");
+            const evt = events.find(x => x.id === id);
+            if (evt) openEditModal(evt);
+          }, { once: true });
+        });
+      });
+
+      markers.push(marker);
+      markerByLocation.set(locationId, marker);
+    }
+
+    // =========================
+    // MOM route layer (roads) + toggle
+    // =========================
+    let momRouteVisible = true;
+    let momRoutePolyline = null;
+
+    const momStops = events
+      .filter(e => e.type === "dragdrive")
+      .slice()
+      .sort((a,b) => (a.momDay ?? 999) - (b.momDay ?? 999));
+
+    const momLatLngs = momStops
+      .map(s => locations[s.locationId])
+      .filter(Boolean)
+      .map(l => [l.lat, l.lon]);
+
+    async function buildRoadRoute(latlngs){
+      const coordStr = latlngs.map(([lat, lon]) => `${lon},${lat}`).join(";");
+      const url = `https://router.project-osrm.org/route/v1/driving/${coordStr}?overview=full&geometries=geojson`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("OSRM request failed");
+      const json = await res.json();
+      const coords = json?.routes?.[0]?.geometry?.coordinates;
+      if (!coords || !coords.length) throw new Error("No route returned");
+      return coords.map(([lon, lat]) => [lat, lon]);
+    }
+
+    async function createOrUpdateMomRoute(){
+      if (momLatLngs.length < 2) return;
+
+      if (momRoutePolyline) {
+        map.removeLayer(momRoutePolyline);
+        momRoutePolyline = null;
+      }
+
+      let routeLatLngs;
+      try {
+        routeLatLngs = await buildRoadRoute(momLatLngs);
+      } catch {
+        routeLatLngs = momLatLngs;
+      }
+
+      momRoutePolyline = L.polyline(routeLatLngs, {
+        color: "#b8ff2c",
+        weight: 3,
+        opacity: 0.85
+      }).addTo(map);
+
+      momRoutePolyline.bringToBack();
+
+      if (!momRouteVisible) {
+        map.removeLayer(momRoutePolyline);
+      }
+    }
+
+    function setMomRouteVisibility(visible){
+      momRouteVisible = visible;
+
+      const btn = document.getElementById("btnToggleMomLines");
+      btn.textContent = `Drag & Drive lines: ${momRouteVisible ? "On" : "Off"}`;
+      btn.classList.toggle("momOn", momRouteVisible);
+
+      if (!momRoutePolyline) return;
+
+      if (momRouteVisible) {
+        momRoutePolyline.addTo(map);
+        momRoutePolyline.bringToBack();
+      } else {
+        map.removeLayer(momRoutePolyline);
+      }
+    }
+
+    createOrUpdateMomRoute();
+
+    for (const stop of momStops){
+      const loc = locations[stop.locationId];
+      if (!loc) continue;
+
+      const labelIcon = L.divIcon({
+        className: "",
+        html: `<div class="momPin">${stop.momDay}/${stop.momTotal}</div>`
+      });
+
+      const labelMarker = L.marker([loc.lat, loc.lon], {
+        icon: labelIcon,
+        interactive: true
+      }).addTo(map);
+
+      labelMarker.on("click", () => openEventOnMap(stop));
+    }
+
+    // =========================
+    // Fit bounds
+    // =========================
+    const groupLayer = L.featureGroup(markers);
+    if (markers.length){
+      map.fitBounds(groupLayer.getBounds().pad(0.18));
+    } else {
+      map.setView([52, -115], 4);
+    }
+
+    // =========================
+    // Sidebar list
+    // =========================
+    const listEl = document.getElementById("eventList");
+    const searchEl = document.getElementById("search");
+
+    function eventMatchesQuery(evt, q){
+      if (!q) return true;
+      const locName = locations[evt.locationId]?.name || "";
+      const hay = `${evt.date} ${evt.eventName} ${locName}`.toLowerCase();
+      return hay.includes(q.toLowerCase());
+    }
+
+    function openEventOnMap(evt){
+      highlightedEventId = evt.id;
+
+      const marker = markerByLocation.get(evt.locationId);
+      if (!marker) return;
+
+      map.setView(marker.getLatLng(), Math.max(map.getZoom(), 7), { animate: true });
+      marker.setPopupContent(buildPopupHtml(evt.locationId));
+      marker.openPopup();
+
+      showEventDetails(evt);
+    }
+
+    function renderList(){
+      const q = (searchEl.value || "").trim();
+      const filtered = events
+        .filter(e => eventMatchesQuery(e, q))
+        .sort((a,b) => dateSortKey(a.date) - dateSortKey(b.date));
+
+      const totalEvents = events.length;
+      const totalShown = filtered.length;
+      document.getElementById("summary").textContent =
+        `${totalEvents} events • showing ${totalShown} in list • Managed via /admin`;
+
+      let html = "";
+      let currentMonth = null;
+
+      for (const evt of filtered){
+        const m = monthNameFromDateStr(evt.date);
+        if (m !== currentMonth){
+          currentMonth = m;
+          html += `<div class="month">${escapeHtml(currentMonth)}</div>`;
+        }
+
+        const locName = locations[evt.locationId]?.name || evt.locationId;
+        const payout = evt.payout || "TBD";
+        const isMom = evt.type === "dragdrive";
+        const momTag = isMom && evt.momDay && evt.momTotal ? `MOM ${evt.momDay}/${evt.momTotal}` : "Drag & Drive";
+
+        html += `
+          <div class="item" data-id="${escapeHtml(evt.id)}">
+            <div class="itemTop">
+              <div class="itemTitle">
+                <span style="color:${isMom ? "var(--mom)" : "var(--accent)"}; font-weight:600">${escapeHtml(evt.date)}</span>
+                — ${escapeHtml(evt.eventName)}
+                ${isMom && evt.momDay ? `<span class="miniTag mom" style="margin-left:8px">${escapeHtml(momTag)}</span>` : ""}
+              </div>
+              <div class="tag ${isMom ? "mom" : ""}">${isMom ? "MOM" : "Race"}</div>
+            </div>
+            <div class="meta">
+              ${escapeHtml(locName)}<br/>
+              Payout: ${escapeHtml(payout)}
+            </div>
+            <div class="actions">
+              <button class="linkBtn" type="button" data-edit-id="${escapeHtml(evt.id)}">Request edit</button>
+            </div>
+          </div>
+        `;
+      }
+
+      listEl.innerHTML = html;
+
+      [...listEl.querySelectorAll(".item")].forEach(node => {
+        const id = node.getAttribute("data-id");
+        node.addEventListener("click", () => {
+          const evt = events.find(e => e.id === id);
+          if (evt) openEventOnMap(evt);
+        });
+      });
+
+      [...listEl.querySelectorAll("[data-edit-id]")].forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute("data-edit-id");
+          const evt = events.find(x => x.id === id);
+          if (evt) openEditModal(evt);
+        });
+      });
+    }
+
+    searchEl.addEventListener("input", renderList);
+    renderList();
+
+    // =========================
+    // Top controls
+    // =========================
+    document.getElementById("btnFitAll").addEventListener("click", () => {
+      map.fitBounds(groupLayer.getBounds().pad(0.18));
+    });
+
+    document.getElementById("btnFocusWest").addEventListener("click", () => {
+      const westBounds = L.latLngBounds([31.0, -127.0], [57.5, -100.0]);
+      map.fitBounds(westBounds.pad(0.06));
+    });
+
+    document.getElementById("btnToggleSidebar").addEventListener("click", () => {
+      const side = document.getElementById("sidebar");
+      const layout = document.getElementById("layout");
+
+      const isHidden = side.style.display === "none";
+      if (isHidden){
+        side.style.display = "flex";
+        layout.style.gridTemplateColumns = "360px 1fr 360px";
+      } else {
+        side.style.display = "none";
+        layout.style.gridTemplateColumns = "1fr 360px";
+      }
+      setTimeout(() => map.invalidateSize(), 150);
+    });
+
+    document.getElementById("btnToggleMomLines").addEventListener("click", () => {
+      setMomRouteVisibility(!momRouteVisible);
+    });
+
+    // =========================
+    // Submit panel toggle + clear
+    // =========================
+    const toggleSubmitBtn = document.getElementById("toggleSubmit");
+    const submitForm = document.getElementById("submitForm");
+
+    toggleSubmitBtn.addEventListener("click", () => {
+      const open = submitForm.classList.toggle("open");
+      toggleSubmitBtn.textContent = open ? "Close" : "Open";
+    });
+
+    document.getElementById("btnClear").addEventListener("click", () => {
+      submitForm.reset();
+      const st = document.getElementById("submitStatus");
+      st.className = "status";
+      st.textContent = "";
+    });
+
+    submitForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const ok = await submitNetlifyForm(
+        submitForm,
+        document.getElementById("submitStatus"),
+        document.getElementById("btnSubmitEvent"),
+        "Submitted! Thanks — it will be reviewed before being added to the map."
+      );
+      if (ok) {
+        submitForm.classList.add("open");
+        toggleSubmitBtn.textContent = "Close";
+      }
+    });
+
+    const editForm = document.getElementById("editForm");
+    document.getElementById("btnEditClear").addEventListener("click", () => {
+      document.getElementById("eRequestedChange").value = "";
+      document.getElementById("eSourceLink").value = "";
+      document.getElementById("eContactEmail").value = "";
+      const st = document.getElementById("editStatus");
+      st.className = "status";
+      st.textContent = "";
+    });
+
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const ok = await submitNetlifyForm(
+        editForm,
+        document.getElementById("editStatus"),
+        document.getElementById("btnSubmitEdit"),
+        "Submitted! Thanks — your edit request was emailed for approval."
+      );
+      if (ok) setTimeout(closeEditModal, 900);
+    });
+
+    }
+
+    // Boot the app after data loads
+    startApp();
+  </script>
+
+  <!-- Netlify form detection stubs (do not remove) -->
+  <form name="event-submission" method="POST" netlify data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="event-submission" />
+    <input name="bot-field" />
+    <input name="event_name" />
+    <input name="event_location" />
+    <input name="event_dates" />
+    <input name="event_page_url" />
+    <input name="classes" />
+    <input name="payout" />
+    <input name="submitter_email" />
+  </form>
+
+  <form name="event-edit-request" method="POST" netlify data-netlify="true" data-netlify-honeypot="bot-field-edit" hidden>
+    <input type="hidden" name="form-name" value="event-edit-request" />
+    <input name="bot-field-edit" />
+    <input name="event_id" />
+    <input name="event_snapshot" />
+    <input name="map_url" />
+    <input name="event_name" />
+    <input name="event_location" />
+    <input name="current_date" />
+    <input name="current_payout" />
+    <input name="requested_change" />
+    <input name="source_link" />
+    <input name="requester_email" />
+  </form>
+
+</body>
+</html>
