@@ -1096,6 +1096,7 @@ async function loadData() {
 
   // Final: normal events + expanded dragdrive day events
   events = baseEvents.concat(expandDragdrives(dragdrives));
+inheritDragdriveSeriesFields(events);
 }
 
 
@@ -1818,6 +1819,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
