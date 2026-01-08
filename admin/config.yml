@@ -2,6 +2,8 @@ backend:
   name: github
   repo: TrackDates/Gittonettlify
   branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
 
 publish_mode: simple
 
@@ -56,3 +58,4 @@ collections:
                 fields:
                   - { label: "Name", name: "name", widget: "string" }
                   - { label: "URL", name: "url", widget: "string" }
+
