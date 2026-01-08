@@ -927,77 +927,61 @@
   </div>
 
   <script>
-    // Tracks / locations
-    const locations = {
-      rad: { name: "RAD Torque Raceway (Nisku, AB)", lat: 53.3374847, lon: -113.5330582 },
-      car: { name: "Central Alberta Raceways (C.A.R.S) — Rimbey, AB", lat: 52.6521, lon: -114.2207 },
-      mhdra: { name: "Medicine Hat Drag Racing Association (MHDRA)", lat: 50.09421, lon: -110.747767 },
-      sir: { name: "Saskatchewan International Raceway (SIR) — Saskatoon area", lat: 51.9708, lon: -106.5428 },
+  // =========================
+  // Load JSON data (Decap publishes these)
+  // =========================
+  let locations = {};
+  let events = [];
 
-      // other locations
-      lillooet: { name: "Lillooet, BC", lat: 50.6863017, lon: -121.9367502 },
-      shadyside: { name: "Shadyside Dragway (Shelby, NC)", lat: 35.2146, lon: -81.6428 },
-      mission: { name: "Mission Raceway Park (Mission, BC)", lat: 49.126389, lon: -122.325278 },
-      threehills: { name: "Three Hills, AB", lat: 51.70712, lon: -113.2648644 },
-      yellowstone: { name: "Yellowstone Drag Strip (Acton, MT)", lat: 45.9340, lon: -108.7543 },
-      beaver: { name: "NAPA Auto Parts Raceway (Beaverlodge, AB)", lat: 55.183833, lon: -119.44183 },
-      area53: { name: "Area 53 Raceway (Forestburg, AB)", lat: 52.5757, lon: -112.0892 },
-      txmotorplex: { name: "Texas Motorplex (Ennis, TX)", lat: 32.329144, lon: -96.716788 },
-      vegas: { name: "Las Vegas Motor Speedway (Las Vegas, NV)", lat: 36.273889, lon: -115.011389 }
-    };
+  async function loadData() {
+    const v = Date.now(); // cache-buster so the browser never reuses an old JSON
 
-    // Events
-    const events = [
-      { id:"e1", date:"TBD", eventName:"500+ rental", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e2", date:"May 2", eventName:"Lil Nugget Shootout", locationId:"lillooet", payout:"TBD", type:"standard" },
-      { id:"e3", date:"May 18", eventName:"Tuna Bash", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e4", date:"May 18", eventName:"KOTS", locationId:"shadyside", payout:"TBD", type:"standard" },
-      { id:"e5", date:"May 29", eventName:"National Open", locationId:"mission", payout:"TBD", type:"standard" },
-      { id:"e6", date:"June 6", eventName:"No Prep", locationId:"threehills", payout:"TBD", type:"standard" },
-      { id:"e7", date:"June 6", eventName:"Border Warz", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e8", date:"June 13", eventName:"P2P", locationId:"mhdra", payout:"TBD", type:"standard" },
-      { id:"e9", date:"June 19", eventName:"Wild West Drag Fest", locationId:"yellowstone", payout:"TBD", type:"standard" },
-      { id:"e10", date:"June 26", eventName:"Doorwarz", locationId:"mission", payout:"TBD", type:"standard" },
-      { id:"e11", date:"July 3", eventName:"Heads Up Havoc", locationId:"sir", payout:"TBD", type:"standard" },
-      { id:"e12", date:"July 10", eventName:"Rocky Mountain Nationals", locationId:"rad", payout:"TBD", type:"standard" },
+    const [locRes, evtRes] = await Promise.all([
+      fetch(`/data/locations.json?v=${v}`, { cache: "no-store" }),
+      fetch(`/data/events-2026.json?v=${v}`, { cache: "no-store" })
+    ]);
 
-      // Mile of Mayhem — ONE event, 6 stops
-      { id:"mom1", date:"July 26", eventName:"Mile of Mayhem — Day 1", locationId:"rad", payout:"TBD", type:"dragdrive", momDay:1, momTotal:6 },
-      { id:"mom2", date:"July 27", eventName:"Mile of Mayhem — Day 2", locationId:"car", payout:"TBD", type:"dragdrive", momDay:2, momTotal:6 },
-      { id:"mom3", date:"July 28", eventName:"Mile of Mayhem — Day 3", locationId:"mhdra", payout:"TBD", type:"dragdrive", momDay:3, momTotal:6 },
-      { id:"mom4", date:"July 29", eventName:"Mile of Mayhem — Day 4", locationId:"sir", payout:"TBD", type:"dragdrive", momDay:4, momTotal:6 },
-      { id:"mom5", date:"July 30", eventName:"Mile of Mayhem — Day 5", locationId:"area53", payout:"TBD", type:"dragdrive", momDay:5, momTotal:6 },
-      { id:"mom6", date:"July 31", eventName:"Mile of Mayhem — Day 6", locationId:"rad", payout:"TBD", type:"dragdrive", momDay:6, momTotal:6 },
+    if (!locRes.ok) throw new Error("Failed to load /data/locations.json");
+    if (!evtRes.ok) throw new Error("Failed to load /data/events-2026.json");
 
-      { id:"e13", date:"Aug 8", eventName:"GP Shootout", locationId:"beaver", payout:"TBD", type:"standard" },
-      { id:"e14", date:"Aug 12", eventName:"Hot August Nights", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e15", date:"Aug 14", eventName:"WC Series: Smoked Out", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e16", date:"Aug 21", eventName:"Smoke Fire Thunder", locationId:"mission", payout:"TBD", type:"standard" },
+    const locJson = await locRes.json();
+    const evtJson = await evtRes.json();
 
-      // CASS demo: sponsors + event page link
-      {
-        id:"e17",
-        date:"TBD",
-        eventName:"CASS No Prep",
-        locationId:"car",
-        payout:"TBD",
-        type:"standard",
-        eventPageUrl: "https://www.facebook.com/profile.php?id=100064269813612",
-        sponsors: [
-          { name: "2020 Blind Installations", url: "https://2020blindservices.ca/" },
-          { name: "Summit Racing", url: "https://www.summitracing.com/" },
-          { name: "FuelTech", url: "https://www.fueltech.net/" },
-          { name: "Davenport Motorsports", url: "https://www.davenportmotorsports.com/" },
-          { name: "Straightline Heavy Equipment", url: "https://www.straightlinemech.ca/" }
-        ]
-      },
+    // locations.json expected shape: { locations: [ {id,name,lat,lon}, ... ] }
+    const locList = Array.isArray(locJson?.locations)
+      ? locJson.locations
+      : (Array.isArray(locJson) ? locJson : []);
 
-      { id:"e18", date:"Sept 20", eventName:"Tuna Bash", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e19", date:"Sept 25", eventName:"WCOS", locationId:"mission", payout:"TBD", type:"standard" },
-      { id:"e20", date:"TBD", eventName:"DVP Rental", locationId:"rad", payout:"TBD", type:"standard" },
-      { id:"e21", date:"Oct 29", eventName:"Radial Round Up", locationId:"txmotorplex", payout:"TBD", type:"standard" },
-      { id:"e22", date:"Nov 19", eventName:"SCSN", locationId:"vegas", payout:"TBD", type:"standard" }
-    ];
+    locations = {};
+    for (const l of locList) {
+      if (!l || l.id == null) continue;
+      const id = String(l.id);
+      const lat = Number(l.lat);
+      const lon = Number(l.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+
+      locations[id] = {
+        name: String(l.name ?? id),
+        lat,
+        lon
+      };
+    }
+
+    // events-2026.json expected shape: { events: [ ... ] }
+    events = Array.isArray(evtJson?.events)
+      ? evtJson.events
+      : (Array.isArray(evtJson) ? evtJson : []);
+  }
+
+  async function startApp() {
+    try {
+      await loadData();
+    } catch (err) {
+      console.error(err);
+      const summary = document.getElementById("summary");
+      if (summary) summary.textContent = "Could not load event data. Please refresh.";
+      return;
+    }
 
     // ===== Date helpers =====
     const monthIndex = {
@@ -1066,11 +1050,11 @@
     }
     function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
 
-    // Gradient from “most important” (orange) to tech-blue
+    // Gradient from orange to tech-blue
     function sponsorColor(i, total){
       if (total <= 1) return "#ff3c00";
-      const start = hexToRgb("#ff3c00");   // orange
-      const end   = hexToRgb("#2aa7ff");   // tech blue
+      const start = hexToRgb("#ff3c00");
+      const end   = hexToRgb("#2aa7ff");
       const t = i / (total - 1);
       return rgbToHex({
         r: lerp(start.r, end.r, t),
@@ -1198,6 +1182,7 @@
     // Group events by location
     const eventsByLocation = {};
     for (const e of events){
+      if (!e || !e.locationId) continue;
       if (!eventsByLocation[e.locationId]) eventsByLocation[e.locationId] = [];
       eventsByLocation[e.locationId].push(e);
     }
@@ -1485,7 +1470,7 @@
         .sort((a,b) => dateSortKey(a.date) - dateSortKey(b.date));
 
       document.getElementById("summary").textContent =
-        `${events.length} events • showing ${filtered.length} in list`;
+        `${events.length} events • showing ${filtered.length} in list • Managed via /admin`;
 
       let html = "";
       let currentMonth = null;
@@ -1651,7 +1636,11 @@
       );
       if (ok) setTimeout(closeEditModal, 900);
     });
-  </script>
+  }
+
+  // Boot the app
+  startApp();
+</script>
 
   <!-- Netlify form detection stubs (do not remove) -->
   <form name="event-submission" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
@@ -1682,3 +1671,4 @@
   </form>
 </body>
 </html>
+
