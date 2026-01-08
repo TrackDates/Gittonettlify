@@ -1,0 +1,21 @@
+{
+  "dragdrives": [
+    {
+      "id": "mom-2026",
+      "title": "Mile of Mayhem",
+      "payout": "TBD",
+      "eventPageUrl": "https://example.com",
+      "sponsors": [
+        { "name": "2020 Blind Installations", "url": "https://2020blindservices.ca/" }
+      ],
+      "stops": [
+        { "date": "July 26", "locationId": "rad" },
+        { "date": "July 27", "locationId": "car" },
+        { "date": "July 28", "locationId": "mhdra" },
+        { "date": "July 29", "locationId": "sir" },
+        { "date": "July 30", "locationId": "area53" },
+        { "date": "July 31", "locationId": "rad" }
+      ]
+    }
+  ]
+}
