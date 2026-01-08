@@ -999,38 +999,60 @@
   return out;
     
   async function loadData() {
-    const v = Date.now(); // cache-buster so the browser never reuses an old JSON
+  const v = Date.now(); // cache-buster so the browser never reuses an old JSON
 
-    const [locRes, evtRes] = await Promise.all([
-      fetch(`/data/locations.json?v=${v}`, { cache: "no-store" }),
-      fetch(`/data/events-2026.json?v=${v}`, { cache: "no-store" })
-    ]);
+  const [locRes, evtRes, ddRes] = await Promise.all([
+    fetch(`/data/locations.json?v=${v}`, { cache: "no-store" }),
+    fetch(`/data/events-2026.json?v=${v}`, { cache: "no-store" }),
+    // dragdrives.json is optional (won’t crash if it’s not there yet)
+    fetch(`/data/dragdrives.json?v=${v}`, { cache: "no-store" }).catch(() => null)
+  ]);
 
-    if (!locRes.ok) throw new Error("Failed to load /data/locations.json");
-    if (!evtRes.ok) throw new Error("Failed to load /data/events-2026.json");
+  if (!locRes.ok) throw new Error("Failed to load /data/locations.json");
+  if (!evtRes.ok) throw new Error("Failed to load /data/events-2026.json");
 
-    const locJson = await locRes.json();
-    const evtJson = await evtRes.json();
+  const locJson = await locRes.json();
+  const evtJson = await evtRes.json();
 
-    // locations.json expected shape: { locations: [ {id,name,lat,lon}, ... ] }
-    const locList = Array.isArray(locJson?.locations)
-      ? locJson.locations
-      : (Array.isArray(locJson) ? locJson : []);
+  // dragdrives.json (optional)
+  let ddJson = null;
+  if (ddRes && ddRes.ok) ddJson = await ddRes.json();
+  dragdrives = Array.isArray(ddJson?.dragdrives) ? ddJson.dragdrives : [];
 
-    locations = {};
-    for (const l of locList) {
-      if (!l || l.id == null) continue;
-      const id = String(l.id);
-      const lat = Number(l.lat);
-      const lon = Number(l.lon);
-      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+  // locations.json expected shape: { locations: [ {id,name,lat,lon}, ... ] }
+  const locList = Array.isArray(locJson?.locations)
+    ? locJson.locations
+    : (Array.isArray(locJson) ? locJson : []);
 
-      locations[id] = {
-        name: String(l.name ?? id),
-        lat,
-        lon
-      };
-    }
+  locations = {};
+  for (const l of locList) {
+    if (!l || l.id == null) continue;
+    const id = String(l.id);
+    const lat = Number(l.lat);
+    const lon = Number(l.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+
+    locations[id] = {
+      name: String(l.name ?? id),
+      lat,
+      lon
+    };
+  }
+
+  // events-2026.json expected shape: { events: [ ... ] }
+  let baseEvents = Array.isArray(evtJson?.events)
+    ? evtJson.events
+    : (Array.isArray(evtJson) ? evtJson : []);
+
+  // If we have dragdrives.json, we don't want duplicate dragdrive items in events-2026.json
+  if (dragdrives.length) {
+    baseEvents = baseEvents.filter(e => e?.type !== "dragdrive");
+  }
+
+  // Final: normal events + expanded dragdrive day events
+  events = baseEvents.concat(expandDragdrives(dragdrives));
+}
+
 
     // events-2026.json expected shape: { events: [ ... ] }
     events = Array.isArray(evtJson?.events)
@@ -1757,6 +1779,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
