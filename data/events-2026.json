@@ -115,15 +115,29 @@
       "eventName": "Wild West Drag Fest",
       "locationId": "yellowstone",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "sponsors": [
+        {
+          "url": "https://www.facebook.com/natesaylerracing",
+          "name": "Nate Sayler Racing"
+        }
+      ],
+      "eventPageUrl": "https://www.facebook.com/profile.php?id=100080199407161"
     },
     {
       "id": "e10",
-      "date": "June 26",
+      "date": "June 25-28",
       "eventName": "Doorwarz",
       "locationId": "mission",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://missionraceway.com/events/doorwarz-xiv-june-25-28/?srsltid=AfmBOor_4U05McOL4urzdc7WLPHYuRE0FWl7-nt-Dze4Ff9awOCbtS6q",
+      "sponsors": [
+        {
+          "name": "Ford River Valley",
+          "url": "https://www.rivervalleyford.ca/en"
+        }
+      ]
     },
     {
       "id": "e11",
