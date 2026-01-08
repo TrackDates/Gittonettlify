@@ -1,0 +1,34 @@
+{
+  "dragdrives": [
+    {
+      "id": "mom-2026",
+      "title": "Mile of Mayhem",
+      "payout": "TBD",
+      "eventPageUrl": "https://www.milesofmayhemdnd.ca/",
+      "sponsors": [
+        {
+          "name": "Preformance World",
+          "url": "https://www.performance-world.com/?srsltid=AfmBOoqizOwUnqtJG-TWiQdEmjEws4ZBg-xHUsusIEXtN9SejfAksN_-"
+        },
+        { "name": "Red Deer Speed and Customs", "url": "https://www.reddeerspeed.ca/" },
+        {
+          "name": "Performance Plus",
+          "url": "https://www.performanceplus.com/?srsltid=AfmBOoqWczAUPyOi7sXp_x_6txvenjaDL_BeM48nOFWNmwmpi3g2GHOC"
+        },
+        { "name": "HardCore Performance Specialties Inc.", "url": "https://hardcoreperformance.com/" },
+        {
+          "name": "Wattsys Welding Inc.",
+          "url": "https://www.facebook.com/p/Wattsys-Welding-INC-100090845462301/"
+        }
+      ],
+      "stops": [
+        { "date": "July 26", "locationId": "rad" },
+        { "date": "July 27", "locationId": "car" },
+        { "date": "July 28", "locationId": "mhdra" },
+        { "date": "July 29", "locationId": "sir" },
+        { "date": "July 30", "locationId": "area53" },
+        { "date": "July 31", "locationId": "rad" }
+      ]
+    }
+  ]
+}
