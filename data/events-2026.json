@@ -413,7 +413,7 @@
     {
       "id": "e20",
       "date": "TBD",
-      "eventName": "DVP Rental",
+      "eventName": "Davenport Motorsports Rental",
       "locationId": "rad",
       "payout": "TBD",
       "type": "standard"
@@ -424,15 +424,39 @@
       "eventName": "Radial Round Up",
       "locationId": "txmotorplex",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://www.facebook.com/events/texas-motorplex/texas-radial-round-up/2046736892421300/"
     },
     {
       "id": "e22",
       "date": "Nov 19",
-      "eventName": "SCSN",
+      "eventName": "Street Car Super Nationals 22",
       "locationId": "vegas",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://streetcarsupernationals.com/",
+      "sponsors": [
+        {
+          "name": "Comp Cams",
+          "url": "https://www.compcams.com/"
+        },
+        {
+          "name": "FuelTech",
+          "url": "https://www.fueltech.net/?srsltid=AfmBOorgdM0eA1hjl5kLQrepiffJWr3Wds1UC8miQW7-akTD92fNIceE"
+        },
+        {
+          "name": "Australian Outback Plants",
+          "url": "https://www.australianoutbackplants.com/"
+        },
+        {
+          "url": "https://www.precisionturbo.com/",
+          "name": "Precision Turbo"
+        },
+        {
+          "name": "SMC Race Cars",
+          "url": "https://www.facebook.com/groups/886324111522947/user/100063483363805/"
+        }
+      ]
     }
   ]
 }
