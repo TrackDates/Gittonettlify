@@ -1000,6 +1000,49 @@ function expandDragdrives(seriesList){
   return out;
 }
 
+    function dragdriveSeriesKey(e){
+  // Prefer an explicit seriesId if you have one
+  if (e && e.seriesId) return `sid:${String(e.seriesId)}`;
+
+  // Otherwise infer from the event name by stripping "— Day X" at the end
+  const name = String(e?.eventName || "");
+  const base = name.replace(/\s*[—-]\s*Day\s*\d+\s*$/i, "").trim();
+  return `name:${base.toLowerCase()}`;
+}
+
+function inheritDragdriveSeriesFields(list){
+  const groups = new Map();
+
+  for (const e of (list || [])){
+    if (!e || e.type !== "dragdrive") continue;
+    const key = dragdriveSeriesKey(e);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(e);
+  }
+
+  for (const arr of groups.values()){
+    // Find a donor day that actually has the info filled in
+    const donor = arr.find(x =>
+      (Array.isArray(x.sponsors) && x.sponsors.length > 0) ||
+      (x.eventPageUrl && String(x.eventPageUrl).trim()) ||
+      (x.payout && String(x.payout).trim() && String(x.payout).trim().toLowerCase() !== "tbd")
+    );
+
+    if (!donor) continue;
+
+    const donorSponsors = Array.isArray(donor.sponsors) ? donor.sponsors : [];
+    const donorPageUrl  = donor.eventPageUrl || "";
+    const donorPayout   = donor.payout || "TBD";
+
+    for (const e of arr){
+      // Only fill blanks — if a day has its own data, we keep it
+      if (!Array.isArray(e.sponsors) || e.sponsors.length === 0) e.sponsors = donorSponsors;
+      if (!e.eventPageUrl || !String(e.eventPageUrl).trim()) e.eventPageUrl = donorPageUrl;
+      if (!e.payout || String(e.payout).trim().toLowerCase() === "tbd") e.payout = donorPayout;
+    }
+  }
+}
+
 async function loadData() {
   const v = Date.now(); // cache-buster so the browser never reuses an old JSON
 
@@ -1775,6 +1818,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
