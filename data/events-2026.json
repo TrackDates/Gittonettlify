@@ -265,35 +265,55 @@
     },
     {
       "id": "e13",
-      "date": "Aug 8",
-      "eventName": "GP Shootout",
+      "date": "Aug 8-9",
+      "eventName": "North vs South Grudge Race",
       "locationId": "beaver",
-      "payout": "TBD",
-      "type": "standard"
+      "payout": "$8000",
+      "type": "standard",
+      "eventPageUrl": "https://www.facebook.com/groups/625435534531722"
     },
     {
       "id": "e14",
       "date": "Aug 12",
-      "eventName": "Hot August Nights",
+      "eventName": "Hot August Night",
       "locationId": "rad",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://radraceway.com/wp-content/uploads/2025/12/2026SeasonSchedule-1.pdf",
+      "sponsors": [
+        {
+          "name": "Midas",
+          "url": "https://www.midas.com/?country=ca"
+        }
+      ]
     },
     {
       "id": "e15",
-      "date": "Aug 14",
-      "eventName": "WC Series: Smoked Out",
+      "date": "Aug 14-16",
+      "eventName": "WC Series: Smoked Out Shootout",
       "locationId": "rad",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://radraceway.com/wp-content/uploads/2025/12/2026SeasonSchedule-1.pdf"
     },
     {
       "id": "e16",
       "date": "Aug 21",
-      "eventName": "Smoke Fire Thunder",
+      "eventName": "Smoke Fire & Thunder",
       "locationId": "mission",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://missionraceway.com/events/lordco-auto-parts-smoke-fire-and-thunder-aug-20-22/?srsltid=AfmBOoqkXIf_a18EOdi6qHywLbvN7iIWqZGc6VzILyoPfNpqrgtFnCVv",
+      "sponsors": [
+        {
+          "name": "Lordco Auto Parts",
+          "url": "https://lordco.com/?srsltid=AfmBOoqklAsYM1APoreyd6A-mx9tMf4sJ4_MF6JtfNsx3EaqUYZg7_eC"
+        },
+        {
+          "name": "Ford River Valley",
+          "url": "https://www.rivervalleyford.ca/en"
+        }
+      ]
     },
     {
       "id": "e17",
