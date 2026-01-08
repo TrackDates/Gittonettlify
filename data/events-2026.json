@@ -318,23 +318,59 @@
     {
       "id": "e17",
       "date": "TBD",
-      "eventName": "CASS No Prep",
+      "eventName": "Central Alberta Streetcar Shootout",
       "locationId": "car",
       "payout": "TBD",
       "type": "standard",
-      "eventPageUrl": "https://www.facebook.com/profile.php?id=100064269813612",
+      "eventPageUrl": "https://www.facebook.com/p/Central-Alberta-Streetcar-Shootout-100064269813612/",
       "sponsors": [
-        {
-          "name": "2020 Blind Installations",
-          "url": "https://2020blindservices.ca/"
-        },
-        {
-          "name": "FuelTech",
-          "url": "https://www.fueltech.net/"
-        },
         {
           "name": "Straightline Heavy Equipment",
           "url": "https://www.straightlinemech.ca/"
+        },
+        {
+          "name": "Legacy Auto Group",
+          "url": "https://www.legacyautogroup.ca/"
+        },
+        {
+          "name": "Sierra Industries",
+          "url": "https://sierraindustries.ca/"
+        },
+        {
+          "name": "Dave Franks Interiors Inc",
+          "url": "https://www.davefranksinteriors.com/"
+        },
+        {
+          "name": "Milron",
+          "url": "https://milron.com/"
+        },
+        {
+          "name": "Accelerated Hotshots & Picker Service",
+          "url": "https://www.google.com/search?q=accelerated+hotshots+%26+picker+service&oq=Accelerated+Hotshots+%26+Picker+Service&gs_lcrp=EgZjaHJvbWUqCggAEAAY4wIYgAQyCggAEAAY4wIYgAQyDQgBEC4YrwEYxwEYgAQyBggCEEUYQDIICAMQABgWGB4yCggEEAAYgAQYogQyCggFEAAYogQYiQUyBggGEEUYPDIGCAcQRRg80gEHNjA5ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8"
+        },
+        {
+          "name": "Wheels Plus",
+          "url": "https://www.wheels-plus.com/"
+        },
+        {
+          "name": "Davenport Motorsports",
+          "url": "https://www.davenportmotorsports.com/"
+        },
+        {
+          "name": "Performance Fuel Injection",
+          "url": "https://performancefuelinjection.ca/"
+        },
+        {
+          "name": "performance plus",
+          "url": "https://www.performanceplus.com/?srsltid=AfmBOory_iPGHkdI8qGuun7e8IVACGWNZ-w-mPEW1L5Ca1JM1gGiPdSf"
+        },
+        {
+          "name": "Steam Engine Stickers",
+          "url": "https://www.steamenginestickers.ca/"
+        },
+        {
+          "name": "Black Sheep Industries",
+          "url": "https://blacksheepindustries.ca/?srsltid=AfmBOoqnuO3g-k0TaRUb2s1Pm_qFH5NLzRSm7U8OdlNcGxPBIWc9mfqU"
         }
       ]
     },
