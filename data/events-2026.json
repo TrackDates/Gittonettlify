@@ -377,18 +377,38 @@
     {
       "id": "e18",
       "date": "Sept 20",
-      "eventName": "Tuna Bash",
+      "eventName": "Tuner Bash",
       "locationId": "rad",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://tunerbash.ca/",
+      "sponsors": [
+        {
+          "name": "Motul",
+          "url": "https://www.motul.com/en-CA"
+        },
+        {
+          "url": "https://www.ebay.ca/b/Auto-Parts-Accessories/6028/bn_569479",
+          "name": "Ebay Motors"
+        },
+        {
+          "name": "MBRP",
+          "url": "https://www.mbrp.com/ca-en/"
+        },
+        {
+          "name": "Yokohama",
+          "url": "https://www.yokohama.ca/"
+        }
+      ]
     },
     {
       "id": "e19",
       "date": "Sept 25",
-      "eventName": "WCOS",
+      "eventName": "West Coast Outlaw Series",
       "locationId": "mission",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://missionraceway.com/series/west-coast-outlaws-series/?srsltid=AfmBOopO8WJJbqDH3lPOdE6TFIrgnOsjBBS0T0lGF54ZKPfq6zI-5IJ2"
     },
     {
       "id": "e20",
