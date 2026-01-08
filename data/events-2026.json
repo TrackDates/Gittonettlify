@@ -19,26 +19,63 @@
     {
       "id": "e3",
       "date": "May 18",
-      "eventName": "Tuna Bash",
+      "eventName": "Tuner Bash",
       "locationId": "rad",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://www.facebook.com/tunerbash",
+      "sponsors": [
+        {
+          "name": "Motul",
+          "url": "https://www.motul.com/en-CA"
+        },
+        {
+          "name": "Ebay Motors",
+          "url": "https://www.ebay.com/b/Auto-Parts-and-Vehicles/6000/bn_1865334"
+        },
+        {
+          "name": "Yokohama",
+          "url": "https://www.yokohama.ca/?utm_source=google&utm_medium=cpc&utm_campaign=21151086151&utm_content=695289096370&utm_term=yokohama&gad_source=1&gad_campaignid=21151086151&gbraid=0AAAAAoXOPbU7ruB1QFuOpKOuEIbW3Xpcn&gclid=Cj0KCQiApfjKBhC0ARIsAMiR_Iv4CVWWNIA03bz_vKtdIGZun5GY2f0kxXOOKLV0Mrj8S12rQV07raEaAgjBEALw_wcB"
+        },
+        {
+          "name": "MBRP",
+          "url": "https://www.mbrp.com/ca-en/?srsltid=AfmBOoqguO8-VZ14ED3Xq1sdrpQMcvyxlocKHtsy4CHvH9NNXbg2SufJ"
+        }
+      ]
     },
     {
       "id": "e4",
       "date": "May 18",
-      "eventName": "KOTS",
+      "eventName": "King of the South",
       "locationId": "shadyside",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://www.facebook.com/events/762916003015653",
+      "sponsors": [
+        {
+          "name": "Strange",
+          "url": "https://www.strangeengineering.net/"
+        },
+        {
+          "name": "Spoold Media",
+          "url": "https://www.youtube.com/channel/UCMbJF5vmiAqXTwZtbitgrzQ"
+        }
+      ]
     },
     {
       "id": "e5",
-      "date": "May 29",
-      "eventName": "National Open",
+      "date": "May 29-31",
+      "eventName": "Northwest National Open",
       "locationId": "mission",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://missionraceway.com/events/2026-nhra-northwest-national-open-series-may-29-31/?srsltid=AfmBOooA1RgxiEbOPyIv9_l6ycFgu-rfr3aCrDTkTyzyx0a9jFYtrZjQ",
+      "sponsors": [
+        {
+          "name": "Ford River Valley",
+          "url": "https://www.rivervalleyford.ca/en"
+        }
+      ]
     },
     {
       "id": "e6",
