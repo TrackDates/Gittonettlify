@@ -1551,6 +1551,8 @@ function setMomRouteVisibility(visible){
 
 createOrUpdateMomRoutes();
 
+    const momStops = events.filter(e => e?.type === "dragdrive" && e.locationId);
+
 
     // Add MOM stop badges at the SAME coordinates
     for (const stop of momStops){
@@ -1813,6 +1815,7 @@ createOrUpdateMomRoutes();
   </form>
 </body>
 </html>
+
 
 
 
