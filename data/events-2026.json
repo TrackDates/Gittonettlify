@@ -97,10 +97,17 @@
     {
       "id": "e8",
       "date": "June 13",
-      "eventName": "P2P",
+      "eventName": "Power to the Pavement",
       "locationId": "mhdra",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://www.facebook.com/photo?fbid=1168681238773093&set=a.485074210467136",
+      "sponsors": [
+        {
+          "name": "Street Wheelers",
+          "url": "https://www.facebook.com/StreetWheelersCarClub"
+        }
+      ]
     },
     {
       "id": "e9",
