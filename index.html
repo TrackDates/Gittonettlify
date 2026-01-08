@@ -964,11 +964,14 @@
   // =========================
   // Load JSON data (Decap publishes these)
   // =========================
-  let locations = {};
-  let events = [];
-  let dragdrives = [];
+ // =========================
+// Load JSON data (Decap publishes these)
+// =========================
+let locations = {};
+let events = [];
+let dragdrives = [];
 
-    function expandDragdrives(seriesList){
+function expandDragdrives(seriesList){
   const out = [];
   for (const s of (seriesList || [])){
     if (!s || !s.id) continue;
@@ -997,8 +1000,9 @@
     }
   }
   return out;
-    
-  async function loadData() {
+}
+
+async function loadData() {
   const v = Date.now(); // cache-buster so the browser never reuses an old JSON
 
   const [locRes, evtRes, ddRes] = await Promise.all([
@@ -1053,12 +1057,6 @@
   events = baseEvents.concat(expandDragdrives(dragdrives));
 }
 
-
-    // events-2026.json expected shape: { events: [ ... ] }
-    events = Array.isArray(evtJson?.events)
-      ? evtJson.events
-      : (Array.isArray(evtJson) ? evtJson : []);
-  }
 
   async function startApp() {
     try {
@@ -1779,6 +1777,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
