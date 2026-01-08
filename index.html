@@ -966,7 +966,38 @@
   // =========================
   let locations = {};
   let events = [];
+  let dragdrives = [];
 
+    function expandDragdrives(seriesList){
+  const out = [];
+  for (const s of (seriesList || [])){
+    if (!s || !s.id) continue;
+
+    const stops = Array.isArray(s.stops) ? s.stops : [];
+    const total = stops.length;
+
+    for (let i = 0; i < total; i++){
+      const stop = stops[i] || {};
+      const locationId = String(stop.locationId || "");
+      if (!locationId) continue;
+
+      out.push({
+        id: `${s.id}-d${i+1}`,
+        seriesId: String(s.id),
+        date: String(stop.date || "TBD"),
+        eventName: `${String(s.title || "Drag & Drive")} — Day ${i+1}`,
+        locationId,
+        payout: s.payout || "TBD",
+        eventPageUrl: s.eventPageUrl || "",
+        sponsors: Array.isArray(s.sponsors) ? s.sponsors : [],
+        type: "dragdrive",
+        momDay: i + 1,
+        momTotal: total
+      });
+    }
+  }
+  return out;
+    
   async function loadData() {
     const v = Date.now(); // cache-buster so the browser never reuses an old JSON
 
@@ -1726,6 +1757,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
