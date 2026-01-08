@@ -91,7 +91,8 @@
       "eventName": "Border Warz",
       "locationId": "rad",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://borderwarz.com/"
     },
     {
       "id": "e8",
