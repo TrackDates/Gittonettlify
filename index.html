@@ -50,9 +50,16 @@
     }
 
     /* Slight boost to improve legibility on the dark basemap */
-#map .leaflet-tile{
-  filter: contrast(1.15) brightness(1.06) saturate(1.08);
+/* Tune base map contrast */
+#map .base-tiles{
+  filter: contrast(1.18) brightness(1.08) saturate(1.05);
 }
+
+/* Brighten labels + boundaries layer */
+#map .label-tiles{
+  filter: brightness(1.35) contrast(1.25);
+}
+
 
     .topbar{
       display:flex;
@@ -1719,6 +1726,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
