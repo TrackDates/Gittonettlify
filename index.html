@@ -1479,79 +1479,78 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
       markerByLocation.set(locationId, marker);
     }
 
-    // =========================
-    // MOM route layer (roads) + toggle
-    // =========================
-    let momRouteVisible = true;
-    let momRoutePolyline = null;
+// =========================
+// Drag & Drive route layer (per series) + toggle
+// =========================
+let momRouteVisible = true;
+let momRouteLayer = L.layerGroup().addTo(map);
 
-    const momStops = events
-      .filter(e => e.type === "dragdrive")
-      .slice()
-      .sort((a,b) => (a.momDay ?? 999) - (b.momDay ?? 999));
+function seriesKeyFor(e){
+  return String(e.seriesId || e.eventName || "").trim().toLowerCase();
+}
 
-    const momLatLngs = momStops
+async function createOrUpdateMomRoutes(){
+  momRouteLayer.clearLayers();
+
+  const dragStops = events.filter(e => e?.type === "dragdrive" && e.locationId);
+
+  // group by seriesId (best) or fallback to eventName
+  const bySeries = new Map();
+  for (const e of dragStops){
+    const key = seriesKeyFor(e);
+    if (!key) continue;
+    if (!bySeries.has(key)) bySeries.set(key, []);
+    bySeries.get(key).push(e);
+  }
+
+  for (const [key, list] of bySeries){
+    // sort within the series (momDay if present, else by date)
+    list.sort((a,b) => (a.momDay ?? 999) - (b.momDay ?? 999));
+
+    const latlngs = list
       .map(s => locations[s.locationId])
       .filter(Boolean)
       .map(l => [l.lat, l.lon]);
 
-    async function buildRoadRoute(latlngs){
-      const coordStr = latlngs.map(([lat, lon]) => `${lon},${lat}`).join(";");
-      const url = `https://router.project-osrm.org/route/v1/driving/${coordStr}?overview=full&geometries=geojson`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("OSRM request failed");
-      const json = await res.json();
-      const coords = json?.routes?.[0]?.geometry?.coordinates;
-      if (!coords || !coords.length) throw new Error("No route returned");
-      return coords.map(([lon, lat]) => [lat, lon]);
+    if (latlngs.length < 2) continue;
+
+    let routeLatLngs = latlngs;
+    try {
+      routeLatLngs = await buildRoadRoute(latlngs);
+    } catch {
+      // fallback already set
     }
 
-    async function createOrUpdateMomRoute(){
-      if (momLatLngs.length < 2) return;
+    const pl = L.polyline(routeLatLngs, {
+      color: "#b8ff2c",
+      weight: 3,
+      opacity: 0.85
+    });
 
-      if (momRoutePolyline) {
-        map.removeLayer(momRoutePolyline);
-        momRoutePolyline = null;
-      }
+    momRouteLayer.addLayer(pl);
+    pl.bringToBack();
+  }
 
-      let routeLatLngs;
-      try {
-        routeLatLngs = await buildRoadRoute(momLatLngs);
-      } catch {
-        routeLatLngs = momLatLngs; // fallback
-      }
+  if (!momRouteVisible) {
+    map.removeLayer(momRouteLayer);
+  } else {
+    momRouteLayer.addTo(map);
+  }
+}
 
-      momRoutePolyline = L.polyline(routeLatLngs, {
-        color: "#b8ff2c",
-        weight: 3,
-        opacity: 0.85
-      }).addTo(map);
+function setMomRouteVisibility(visible){
+  momRouteVisible = visible;
 
-      momRoutePolyline.bringToBack();
+  const btn = document.getElementById("btnToggleMomLines");
+  btn.textContent = `Drag & Drive Est. Route: ${momRouteVisible ? "On" : "Off"}`;
+  btn.classList.toggle("momOn", momRouteVisible);
 
-      if (!momRouteVisible) {
-        map.removeLayer(momRoutePolyline);
-      }
-    }
+  if (momRouteVisible) momRouteLayer.addTo(map);
+  else map.removeLayer(momRouteLayer);
+}
 
-    function setMomRouteVisibility(visible){
-      momRouteVisible = visible;
+createOrUpdateMomRoutes();
 
-      const btn = document.getElementById("btnToggleMomLines");
-      btn.textContent = `Drag & Drive Est. Route: ${momRouteVisible ? "On" : "Off"}`;
-      btn.classList.toggle("momOn", momRouteVisible);
-
-      if (!momRoutePolyline) return;
-
-      if (momRouteVisible) {
-        momRoutePolyline.addTo(map);
-        momRoutePolyline.bringToBack();
-      } else {
-        map.removeLayer(momRoutePolyline);
-      }
-    }
-
-    createOrUpdateMomRoute();
 
     // Add MOM stop badges at the SAME coordinates
     for (const stop of momStops){
@@ -1814,6 +1813,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
