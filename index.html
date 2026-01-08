@@ -1093,6 +1093,7 @@ async function loadData() {
   }
 
   events = baseEvents.concat(expandDragdrives(dragdrives));
+  inheritDragdriveSeriesFields(events); // fills blanks if any exist
 }
 
   async function startApp() {
@@ -1815,6 +1816,7 @@ createOrUpdateMomRoutes();
   </form>
 </body>
 </html>
+
 
 
 
