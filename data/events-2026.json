@@ -141,11 +141,29 @@
     },
     {
       "id": "e11",
-      "date": "July 3",
+      "date": "July 3-4",
       "eventName": "Heads Up Havoc",
       "locationId": "sir",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://www.facebook.com/headsupracingatSIR/",
+      "sponsors": [
+        {
+          "name": "GeeBee Construction"
+        },
+        {
+          "name": "RAM Excavation"
+        },
+        {
+          "name": "BBJ Five Star Service"
+        },
+        {
+          "name": "Poor Boys"
+        },
+        {
+          "name": "Triumph"
+        }
+      ]
     },
     {
       "id": "e12",
@@ -153,17 +171,46 @@
       "eventName": "Rocky Mountain Nationals",
       "locationId": "rad",
       "payout": "TBD",
-      "type": "standard"
+      "type": "standard",
+      "eventPageUrl": "https://radraceway.com/wp-content/uploads/2025/12/2026SeasonSchedule-1.pdf",
+      "sponsors": [
+        {
+          "name": "Rad Torque System",
+          "url": "https://www.radtorque.com/"
+        }
+      ]
     },
     {
-      "id": "mom1",
-      "date": "July 26",
       "eventName": "Mile of Mayhem — Day 1",
-      "locationId": "rad",
       "payout": "TBD",
-      "type": "dragdrive",
+      "date": "July 26",
+      "locationId": "rad",
       "momDay": 1,
-      "momTotal": 6
+      "sponsors": [
+        {
+          "name": "Preformance World",
+          "url": "https://www.performance-world.com/?srsltid=AfmBOoqizOwUnqtJG-TWiQdEmjEws4ZBg-xHUsusIEXtN9SejfAksN_-"
+        },
+        {
+          "name": "Red Deer Speed and Customs",
+          "url": "https://www.reddeerspeed.ca/"
+        },
+        {
+          "name": "Performance Plus",
+          "url": "https://www.performanceplus.com/?srsltid=AfmBOoqWczAUPyOi7sXp_x_6txvenjaDL_BeM48nOFWNmwmpi3g2GHOC"
+        },
+        {
+          "name": "HardCore Performance Specialties Inc.",
+          "url": "https://hardcoreperformance.com/"
+        },
+        {
+          "name": "Wattsys Welding Inc.",
+          "url": "https://www.facebook.com/p/Wattsys-Welding-INC-100090845462301/"
+        }
+      ],
+      "momTotal": 6,
+      "type": "dragdrive",
+      "id": "mom1"
     },
     {
       "id": "mom2",
