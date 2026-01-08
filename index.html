@@ -49,6 +49,11 @@
       backdrop-filter: blur(8px);
     }
 
+    /* Slight boost to improve legibility on the dark basemap */
+#map .leaflet-tile{
+  filter: contrast(1.15) brightness(1.06) saturate(1.08);
+}
+
     .topbar{
       display:flex;
       align-items:center;
@@ -1700,6 +1705,7 @@ L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.p
   </form>
 </body>
 </html>
+
 
 
 
