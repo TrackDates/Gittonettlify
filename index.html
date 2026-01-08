@@ -1197,9 +1197,16 @@
     // =========================
     const map = L.map("map", { zoomControl: true, preferCanvas: true });
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
-    }).addTo(map);
+    // Base: dark with higher contrast (no labels)
+L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
+  attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+}).addTo(map);
+
+// Overlay: crisp labels on top (makes it easier to read)
+L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png", {
+  opacity: 0.92
+}).addTo(map);
+
 
     // Group events by location
     const eventsByLocation = {};
@@ -1693,5 +1700,6 @@
   </form>
 </body>
 </html>
+
 
 
