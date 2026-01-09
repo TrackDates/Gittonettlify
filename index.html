@@ -1484,6 +1484,42 @@ function seriesKeyFor(e){
   return String(e.seriesId || e.eventName || "").trim().toLowerCase();
 }
 
+    // Simple OSRM-based road routing (falls back to straight lines if OSRM fails)
+async function buildRoadRoute(latlngs) {
+  // OSRM expects "lon,lat;lon,lat" and returns geojson coords as [lon,lat]
+  const OSRM = "https://router.project-osrm.org/route/v1/driving/";
+
+  if (!Array.isArray(latlngs) || latlngs.length < 2) return latlngs;
+
+  const out = [];
+  for (let i = 0; i < latlngs.length - 1; i++) {
+    const a = latlngs[i];
+    const b = latlngs[i + 1];
+
+    const url =
+      OSRM +
+      `${a[1]},${a[0]};${b[1]},${b[0]}` +
+      `?overview=full&geometries=geojson&alternatives=false&steps=false`;
+
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`OSRM HTTP ${res.status}`);
+
+    const data = await res.json();
+    const coords = data?.routes?.[0]?.geometry?.coordinates;
+    if (!Array.isArray(coords) || coords.length < 2) throw new Error("OSRM returned no geometry");
+
+    // Convert [lon,lat] -> [lat,lon]
+    const leg = coords.map(([lon, lat]) => [lat, lon]);
+
+    // Avoid duplicating the junction point between legs
+    if (out.length) leg.shift();
+
+    out.push(...leg);
+  }
+
+  return out;
+}
+
 async function createOrUpdateMomRoutes(){
   momRouteLayer.clearLayers();
 
@@ -1810,6 +1846,7 @@ createOrUpdateMomRoutes();
   </form>
 </body>
 </html>
+
 
 
 
