@@ -1512,9 +1512,9 @@ async function createOrUpdateMomRoutes(){
     let routeLatLngs = latlngs;
     try {
       routeLatLngs = await buildRoadRoute(latlngs);
-    } catch {
-      // fallback already set
-    }
+    } catch (err) {
+  console.warn("Road route failed; using straight lines instead:", err);
+}
 
     const pl = L.polyline(routeLatLngs, {
       color: "#b8ff2c",
@@ -1810,6 +1810,7 @@ createOrUpdateMomRoutes();
   </form>
 </body>
 </html>
+
 
 
 
