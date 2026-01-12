@@ -23,8 +23,9 @@
       --accent:#ff3c00;
       --line: rgba(255,60,0,.55);
 
-      --mom:#b8ff2c;          /* Drag & Drive */
-      --momLine: rgba(184,255,44,.75);
+      /* Drag & Drive (DnD) */
+      --dnd:#b8ff2c;
+      --dndLine: rgba(184,255,44,.75);
 
       --cardLine: rgba(255,255,255,.08);
 
@@ -49,17 +50,15 @@
       backdrop-filter: blur(8px);
     }
 
-    /* Slight boost to improve legibility on the dark basemap */
-/* Tune base map contrast */
-#map .base-tiles{
-  filter: contrast(1.28) brightness(1.28) saturate(1.10);
-}
+    /* Tune base map contrast */
+    #map .base-tiles{
+      filter: contrast(1.28) brightness(1.28) saturate(1.10);
+    }
 
-/* Brighten labels + boundaries layer */
-#map .label-tiles{
-  filter: brightness(1.60) contrast(1.40);
-}
-
+    /* Brighten labels + boundaries layer */
+    #map .label-tiles{
+      filter: brightness(1.60) contrast(1.40);
+    }
 
     .topbar{
       display:flex;
@@ -125,8 +124,8 @@
     }
     .btn.secondary:hover{ background: rgba(255,255,255,.06); }
 
-    /* MOM toggle button gets a subtle glow when ON */
-    .btn.momOn{
+    /* DnD route toggle glow */
+    .btn.dndOn{
       border-color: rgba(184,255,44,.50);
       background: rgba(184,255,44,.08);
       box-shadow: 0 0 14px rgba(184,255,44,.12);
@@ -195,13 +194,13 @@
       box-shadow: 0 0 10px rgba(255,255,255,.08);
     }
     .dot.red{ background: var(--accent); }
-    .dot.green{ background: var(--mom); }
+    .dot.green{ background: var(--dnd); }
 
     .lineKey{
       display:inline-block;
       width: 22px;
       height: 3px;
-      background: var(--momLine);
+      background: var(--dndLine);
       border-radius: 999px;
       margin-right: 6px;
       vertical-align: 2px;
@@ -214,34 +213,34 @@
     }
 
     .month{
-  position: relative;
-  margin: 14px 0 8px;
-  padding: 9px 10px 9px 12px;
-  border: 1px solid rgba(42,167,255,.28);              /* tech-blue border */
-  background: linear-gradient(
-    90deg,
-    rgba(42,167,255,.16),
-    rgba(255,60,0,.08) 65%,
-    rgba(255,255,255,.03)
-  );
-  border-radius: 12px;
-  font-size: 12px;
-  color: rgba(210,240,255,.95);                        /* brighter text */
-  letter-spacing: .6px;
-  text-shadow: 0 0 10px rgba(42,167,255,.18);
-}
+      position: relative;
+      margin: 14px 0 8px;
+      padding: 9px 10px 9px 12px;
+      border: 1px solid rgba(42,167,255,.28);
+      background: linear-gradient(
+        90deg,
+        rgba(42,167,255,.16),
+        rgba(255,60,0,.08) 65%,
+        rgba(255,255,255,.03)
+      );
+      border-radius: 12px;
+      font-size: 12px;
+      color: rgba(210,240,255,.95);
+      letter-spacing: .6px;
+      text-shadow: 0 0 10px rgba(42,167,255,.18);
+    }
 
-.month::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:4px;
-  background: linear-gradient(180deg, var(--techBlue), var(--accent));
-  box-shadow: 0 0 16px rgba(42,167,255,.20);
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
+    .month::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:4px;
+      background: linear-gradient(180deg, var(--techBlue), var(--accent));
+      box-shadow: 0 0 16px rgba(42,167,255,.20);
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
     }
 
     .item{
@@ -284,7 +283,7 @@
       color: var(--muted);
       white-space: nowrap;
     }
-    .tag.mom{
+    .tag.dnd{
       border-color: rgba(184,255,44,.65);
       color: rgba(220,255,170,.95);
       background: rgba(184,255,44,.08);
@@ -380,8 +379,8 @@
       color: var(--accent);
       font-weight: 600;
     }
-    .date.mom{
-      color: var(--mom);
+    .date.dnd{
+      color: var(--dnd);
       text-shadow: 0 0 10px rgba(184,255,44,.25);
     }
 
@@ -398,7 +397,7 @@
       margin-left: 8px;
       white-space: nowrap;
     }
-    .miniTag.mom{
+    .miniTag.dnd{
       border-color: rgba(184,255,44,.65);
       background: rgba(184,255,44,.08);
       color: rgba(220,255,170,.95);
@@ -414,8 +413,8 @@
       align-items:center;
     }
 
-    /* MOM stop badges (same coordinates as tracks; visually nudged with CSS only) */
-    .momPin{
+    /* DnD stop badges (same coordinates as tracks; staggered via CSS vars) */
+    .dndPin{
       display:inline-flex;
       align-items:center;
       justify-content:center;
@@ -427,7 +426,7 @@
       font-size: 11px;
       letter-spacing: .2px;
       box-shadow: 0 0 14px rgba(184,255,44,.20);
-      transform: translate(10px, -18px); /* visual nudge only */
+      transform: translate(var(--pinX, 10px), var(--pinY, -18px));
       user-select:none;
     }
 
@@ -773,7 +772,7 @@
         <div class="sub" id="summary">Loading…</div>
       </div>
       <div class="controls">
-        <button class="btn secondary momOn" id="btnToggleMomLines" type="button">Drag &amp; Drive lines: On</button>
+        <button class="btn secondary dndOn" id="btnToggleDndRoute" type="button">DnD route: On</button>
         <button class="btn" id="btnFitAll" type="button">Fit all</button>
         <button class="btn" id="btnFocusWest" type="button">Focus west</button>
         <button class="btn secondary" id="btnToggleSidebar" type="button">Toggle list</button>
@@ -789,8 +788,8 @@
         </div>
         <div class="legend">
           <span><span class="dot red"></span>Standard race</span>
-          <span><span class="dot green"></span>Mile of Mayhem stop</span>
-          <span><span class="lineKey"></span>MOM driving route</span>
+          <span><span class="dot green"></span>DnD stop (Mile of Mayhem)</span>
+          <span><span class="lineKey"></span>DnD driving route</span>
         </div>
       </div>
       <div class="list" id="eventList"></div>
@@ -962,139 +961,135 @@
   // =========================
   // Load JSON data (Decap publishes these)
   // =========================
- // =========================
-// Load JSON data (Decap publishes these)
-// =========================
-let locations = {};
-let events = [];
-let dragdrives = [];
+  let locations = {};
+  let events = [];
+  let dragdrives = [];
 
-function expandDragdrives(seriesList){
-  const out = [];
-  for (const s of (seriesList || [])){
-    if (!s || !s.id) continue;
+  function expandDragdrives(seriesList){
+    const out = [];
+    for (const s of (seriesList || [])){
+      if (!s || !s.id) continue;
 
-    const stops = Array.isArray(s.stops) ? s.stops : [];
-    const total = stops.length;
+      const stops = Array.isArray(s.stops) ? s.stops : [];
+      const total = stops.length;
 
-    for (let i = 0; i < total; i++){
-      const stop = stops[i] || {};
-      const locationId = String(stop.locationId || "");
-      if (!locationId) continue;
+      for (let i = 0; i < total; i++){
+        const stop = stops[i] || {};
+        const locationId = String(stop.locationId || "");
+        if (!locationId) continue;
 
-      // allow per-day override if you ever want it later:
-      const daySponsors = Array.isArray(stop.sponsors) ? stop.sponsors : null;
-      const dayPageUrl  = stop.eventPageUrl || "";
-      const dayPayout   = stop.payout || "";
+        // allow per-day override if you ever want it later:
+        const daySponsors = Array.isArray(stop.sponsors) ? stop.sponsors : null;
+        const dayPageUrl  = stop.eventPageUrl || "";
+        const dayPayout   = stop.payout || "";
 
-      out.push({
-        id: `${s.id}-d${i+1}`,
-        seriesId: String(s.id),
-        date: String(stop.date || "TBD"),
-        eventName: `${String(s.title || "Drag & Drive")} — Day ${i+1}`,
-        locationId,
-        payout: dayPayout || s.payout || "TBD",
-        eventPageUrl: dayPageUrl || s.eventPageUrl || "",
-        sponsors: (daySponsors && daySponsors.length) ? daySponsors : (Array.isArray(s.sponsors) ? s.sponsors : []),
-        type: "dragdrive",
-        momDay: i + 1,
-        momTotal: total
-      });
+        out.push({
+          id: `${s.id}-d${i+1}`,
+          seriesId: String(s.id),
+          date: String(stop.date || "TBD"),
+          eventName: `${String(s.title || "Drag & Drive")} — Day ${i+1}`,
+          locationId,
+          payout: dayPayout || s.payout || "TBD",
+          eventPageUrl: dayPageUrl || s.eventPageUrl || "",
+          sponsors: (daySponsors && daySponsors.length) ? daySponsors : (Array.isArray(s.sponsors) ? s.sponsors : []),
+          type: "dragdrive",
+          dndDay: i + 1,
+          dndTotal: total
+        });
+      }
+    }
+    return out;
+  }
+
+  function dragdriveSeriesKey(e){
+    // Prefer an explicit seriesId if you have one
+    if (e && e.seriesId) return `sid:${String(e.seriesId)}`;
+
+    // Otherwise infer from the event name by stripping "— Day X" at the end
+    const name = String(e?.eventName || "");
+    const base = name.replace(/\s*[—-]\s*Day\s*\d+\s*$/i, "").trim();
+    return `name:${base.toLowerCase()}`;
+  }
+
+  function inheritDragdriveSeriesFields(list){
+    const groups = new Map();
+
+    for (const e of (list || [])){
+      if (!e || e.type !== "dragdrive") continue;
+      const key = dragdriveSeriesKey(e);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(e);
+    }
+
+    for (const arr of groups.values()){
+      // Find a donor day that actually has the info filled in
+      const donor = arr.find(x =>
+        (Array.isArray(x.sponsors) && x.sponsors.length > 0) ||
+        (x.eventPageUrl && String(x.eventPageUrl).trim()) ||
+        (x.payout && String(x.payout).trim() && String(x.payout).trim().toLowerCase() !== "tbd")
+      );
+
+      if (!donor) continue;
+
+      const donorSponsors = Array.isArray(donor.sponsors) ? donor.sponsors : [];
+      const donorPageUrl  = donor.eventPageUrl || "";
+      const donorPayout   = donor.payout || "TBD";
+
+      for (const e of arr){
+        // Only fill blanks — if a day has its own data, we keep it
+        if (!Array.isArray(e.sponsors) || e.sponsors.length === 0) e.sponsors = donorSponsors;
+        if (!e.eventPageUrl || !String(e.eventPageUrl).trim()) e.eventPageUrl = donorPageUrl;
+        if (!e.payout || String(e.payout).trim().toLowerCase() === "tbd") e.payout = donorPayout;
+      }
     }
   }
-  return out;
-}
 
+  async function loadData() {
+    const v = Date.now();
 
-    function dragdriveSeriesKey(e){
-  // Prefer an explicit seriesId if you have one
-  if (e && e.seriesId) return `sid:${String(e.seriesId)}`;
+    const [locRes, evtRes, ddRes] = await Promise.all([
+      fetch(`/data/locations.json?v=${v}`, { cache: "no-store" }),
+      fetch(`/data/events-2026.json?v=${v}`, { cache: "no-store" }),
+      fetch(`/data/dragdrives.json?v=${v}`, { cache: "no-store" }).catch(() => null)
+    ]);
 
-  // Otherwise infer from the event name by stripping "— Day X" at the end
-  const name = String(e?.eventName || "");
-  const base = name.replace(/\s*[—-]\s*Day\s*\d+\s*$/i, "").trim();
-  return `name:${base.toLowerCase()}`;
-}
+    if (!locRes.ok) throw new Error("Failed to load /data/locations.json");
+    if (!evtRes.ok) throw new Error("Failed to load /data/events-2026.json");
 
-function inheritDragdriveSeriesFields(list){
-  const groups = new Map();
+    const locJson = await locRes.json();
+    const evtJson = await evtRes.json();
 
-  for (const e of (list || [])){
-    if (!e || e.type !== "dragdrive") continue;
-    const key = dragdriveSeriesKey(e);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(e);
-  }
+    let ddJson = null;
+    if (ddRes && ddRes.ok) ddJson = await ddRes.json();
+    dragdrives = Array.isArray(ddJson?.dragdrives) ? ddJson.dragdrives : [];
 
-  for (const arr of groups.values()){
-    // Find a donor day that actually has the info filled in
-    const donor = arr.find(x =>
-      (Array.isArray(x.sponsors) && x.sponsors.length > 0) ||
-      (x.eventPageUrl && String(x.eventPageUrl).trim()) ||
-      (x.payout && String(x.payout).trim() && String(x.payout).trim().toLowerCase() !== "tbd")
-    );
+    const locList = Array.isArray(locJson?.locations)
+      ? locJson.locations
+      : (Array.isArray(locJson) ? locJson : []);
 
-    if (!donor) continue;
+    locations = {};
+    for (const l of locList) {
+      if (!l || l.id == null) continue;
+      const id = String(l.id);
+      const lat = Number(l.lat);
+      const lon = Number(l.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
 
-    const donorSponsors = Array.isArray(donor.sponsors) ? donor.sponsors : [];
-    const donorPageUrl  = donor.eventPageUrl || "";
-    const donorPayout   = donor.payout || "TBD";
-
-    for (const e of arr){
-      // Only fill blanks — if a day has its own data, we keep it
-      if (!Array.isArray(e.sponsors) || e.sponsors.length === 0) e.sponsors = donorSponsors;
-      if (!e.eventPageUrl || !String(e.eventPageUrl).trim()) e.eventPageUrl = donorPageUrl;
-      if (!e.payout || String(e.payout).trim().toLowerCase() === "tbd") e.payout = donorPayout;
+      locations[id] = { name: String(l.name ?? id), lat, lon };
     }
+
+    let baseEvents = Array.isArray(evtJson?.events)
+      ? evtJson.events
+      : (Array.isArray(evtJson) ? evtJson : []);
+
+    // If dragdrives.json exists, don’t double-list dragdrive entries in events-2026.json
+    if (dragdrives.length) {
+      baseEvents = baseEvents.filter(e => e?.type !== "dragdrive");
+    }
+
+    events = baseEvents.concat(expandDragdrives(dragdrives));
+    inheritDragdriveSeriesFields(events);
   }
-}
-
-async function loadData() {
-  const v = Date.now();
-
-  const [locRes, evtRes, ddRes] = await Promise.all([
-    fetch(`/data/locations.json?v=${v}`, { cache: "no-store" }),
-    fetch(`/data/events-2026.json?v=${v}`, { cache: "no-store" }),
-    fetch(`/data/dragdrives.json?v=${v}`, { cache: "no-store" }).catch(() => null)
-  ]);
-
-  if (!locRes.ok) throw new Error("Failed to load /data/locations.json");
-  if (!evtRes.ok) throw new Error("Failed to load /data/events-2026.json");
-
-  const locJson = await locRes.json();
-  const evtJson = await evtRes.json();
-
-  let ddJson = null;
-  if (ddRes && ddRes.ok) ddJson = await ddRes.json();
-  dragdrives = Array.isArray(ddJson?.dragdrives) ? ddJson.dragdrives : [];
-
-  const locList = Array.isArray(locJson?.locations)
-    ? locJson.locations
-    : (Array.isArray(locJson) ? locJson : []);
-
-  locations = {};
-  for (const l of locList) {
-    if (!l || l.id == null) continue;
-    const id = String(l.id);
-    const lat = Number(l.lat);
-    const lon = Number(l.lon);
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
-
-    locations[id] = { name: String(l.name ?? id), lat, lon };
-  }
-
-  let baseEvents = Array.isArray(evtJson?.events)
-    ? evtJson.events
-    : (Array.isArray(evtJson) ? evtJson : []);
-
-  // If dragdrives.json exists, don’t double-list dragdrive entries in events-2026.json
-  if (dragdrives.length) {
-    baseEvents = baseEvents.filter(e => e?.type !== "dragdrive");
-  }
-
-  events = baseEvents.concat(expandDragdrives(dragdrives));
-  inheritDragdriveSeriesFields(events); // fills blanks if any exist
-}
 
   async function startApp() {
     try {
@@ -1299,23 +1294,22 @@ async function loadData() {
     const map = L.map("map", { zoomControl: true, preferCanvas: true });
 
     // Base: dark with higher contrast (no labels)
-const baseTiles = L.tileLayer(
-  "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-  {
-    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-    className: "base-tiles"
-  }
-).addTo(map);
+    const baseTiles = L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
+      {
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+        className: "base-tiles"
+      }
+    ).addTo(map);
 
-const labelTiles = L.tileLayer(
-  "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",
-  {
-    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-    className: "label-tiles",
-    opacity: 0.95
-  }
-).addTo(map);
-
+    const labelTiles = L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",
+      {
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+        className: "label-tiles",
+        opacity: 0.95
+      }
+    ).addTo(map);
 
     // Group events by location
     const eventsByLocation = {};
@@ -1386,12 +1380,12 @@ const labelTiles = L.tileLayer(
 
       const items = evts.map(e => {
         const isHighlight = e.id === highlightedEventId;
-        const isMom = e.type === "dragdrive";
-        const dateClass = isMom ? "date mom" : "date";
+        const isDnd = e.type === "dragdrive";
+        const dateClass = isDnd ? "date dnd" : "date";
         const payout = e.payout || "TBD";
 
-        const momBadge = isMom && e.momDay && e.momTotal
-          ? `<span class="miniTag mom">MOM ${e.momDay}/${e.momTotal}</span>`
+        const dndBadge = isDnd && e.dndDay && e.dndTotal
+          ? `<span class="miniTag dnd">DnD ${e.dndDay}/${e.dndTotal}</span>`
           : "";
 
         const pageUrl = normalizeUrl(e.eventPageUrl || "");
@@ -1403,7 +1397,7 @@ const labelTiles = L.tileLayer(
           <li style="${isHighlight ? "background:rgba(255,255,255,.06); border-radius:10px; padding:6px 8px; margin-left:-8px;" : ""}">
             <span class="${dateClass}">${escapeHtml(e.date)}</span>
             — <span>${escapeHtml(e.eventName)}</span>
-            ${momBadge}
+            ${dndBadge}
             <div style="margin-top:4px; font-size:11px; color:rgba(255,255,255,.72)">
               <span class="payout">Payout: ${escapeHtml(payout)}</span>
               ${pageLink}
@@ -1473,167 +1467,143 @@ const labelTiles = L.tileLayer(
       markers.push(marker);
       markerByLocation.set(locationId, marker);
     }
-// Builds an estimated road-following route using OSRM.
-// Input: [[lat, lon], [lat, lon], ...]
-// Output: [[lat, lon], ...] detailed polyline points
-async function buildRoadRoute(latlngs) {
-  const OSRM = "https://router.project-osrm.org/route/v1/driving/";
 
-  if (!Array.isArray(latlngs) || latlngs.length < 2) return latlngs;
+    // =========================
+    // OSRM road routing (fallback to straight lines if it fails)
+    // Input: [[lat, lon], [lat, lon], ...]
+    // Output: [[lat, lon], ...] detailed polyline points
+    // =========================
+    async function buildRoadRoute(latlngs) {
+      const OSRM = "https://router.project-osrm.org/route/v1/driving/";
+      if (!Array.isArray(latlngs) || latlngs.length < 2) return latlngs;
 
-  const out = [];
+      const out = [];
 
-  // Route each leg (A->B, B->C...) so long trips don't fail
-  for (let i = 0; i < latlngs.length - 1; i++) {
-    const a = latlngs[i];     // [lat, lon]
-    const b = latlngs[i + 1]; // [lat, lon]
+      // Route each leg (A->B, B->C...) so long trips don't fail
+      for (let i = 0; i < latlngs.length - 1; i++) {
+        const a = latlngs[i];     // [lat, lon]
+        const b = latlngs[i + 1]; // [lat, lon]
 
-    const url =
-      OSRM +
-      `${a[1]},${a[0]};${b[1]},${b[0]}` +
-      `?overview=full&geometries=geojson&alternatives=false&steps=false`;
+        const url =
+          OSRM +
+          `${a[1]},${a[0]};${b[1]},${b[0]}` +
+          `?overview=full&geometries=geojson&alternatives=false&steps=false`;
 
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`OSRM HTTP ${res.status}`);
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(`OSRM HTTP ${res.status}`);
 
-    const data = await res.json();
-    const coords = data?.routes?.[0]?.geometry?.coordinates; // [[lon,lat],...]
+        const data = await res.json();
+        const coords = data?.routes?.[0]?.geometry?.coordinates; // [[lon,lat],...]
 
-    if (!Array.isArray(coords) || coords.length < 2) {
-      throw new Error("OSRM returned no geometry");
+        if (!Array.isArray(coords) || coords.length < 2) {
+          throw new Error("OSRM returned no geometry");
+        }
+
+        // Convert [lon,lat] -> [lat,lon]
+        const leg = coords.map(([lon, lat]) => [lat, lon]);
+
+        // Avoid duplicating the joining point between legs
+        if (out.length) leg.shift();
+
+        out.push(...leg);
+      }
+
+      return out;
     }
 
-    // Convert [lon,lat] -> [lat,lon]
-    const leg = coords.map(([lon, lat]) => [lat, lon]);
+    // =========================
+    // DnD route layer (per series) + toggle
+    // =========================
+    let dndRouteVisible = true;
+    let dndRouteLayer = L.layerGroup().addTo(map);
 
-    // Avoid duplicating the joining point between legs
-    if (out.length) leg.shift();
+    function seriesKeyFor(e){
+      return String(e.seriesId || e.eventName || "").trim().toLowerCase();
+    }
 
-    out.push(...leg);
-  }
+    async function createOrUpdateDndRoutes(){
+      dndRouteLayer.clearLayers();
 
-  return out;
-}
+      const dndStops = events.filter(e => e?.type === "dragdrive" && e.locationId);
 
-// =========================
-// Drag & Drive route layer (per series) + toggle
-// =========================
-let momRouteVisible = true;
-let momRouteLayer = L.layerGroup().addTo(map);
+      // group by seriesId (best) or fallback to eventName
+      const bySeries = new Map();
+      for (const e of dndStops){
+        const key = seriesKeyFor(e);
+        if (!key) continue;
+        if (!bySeries.has(key)) bySeries.set(key, []);
+        bySeries.get(key).push(e);
+      }
 
-function seriesKeyFor(e){
-  return String(e.seriesId || e.eventName || "").trim().toLowerCase();
-}
+      for (const [key, list] of bySeries){
+        // sort within the series (dndDay if present, else by date)
+        list.sort((a,b) => (a.dndDay ?? 999) - (b.dndDay ?? 999));
 
-    // Simple OSRM-based road routing (falls back to straight lines if OSRM fails)
-async function buildRoadRoute(latlngs) {
-  // OSRM expects "lon,lat;lon,lat" and returns geojson coords as [lon,lat]
-  const OSRM = "https://router.project-osrm.org/route/v1/driving/";
+        const latlngs = list
+          .map(s => locations[s.locationId])
+          .filter(Boolean)
+          .map(l => [l.lat, l.lon]);
 
-  if (!Array.isArray(latlngs) || latlngs.length < 2) return latlngs;
+        if (latlngs.length < 2) continue;
 
-  const out = [];
-  for (let i = 0; i < latlngs.length - 1; i++) {
-    const a = latlngs[i];
-    const b = latlngs[i + 1];
+        let routeLatLngs = latlngs;
+        try {
+          routeLatLngs = await buildRoadRoute(latlngs);
+        } catch (err) {
+          console.warn("Road route failed; using straight lines instead:", err);
+        }
 
-    const url =
-      OSRM +
-      `${a[1]},${a[0]};${b[1]},${b[0]}` +
-      `?overview=full&geometries=geojson&alternatives=false&steps=false`;
+        const pl = L.polyline(routeLatLngs, {
+          color: "#b8ff2c",
+          weight: 3,
+          opacity: 0.85
+        });
 
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`OSRM HTTP ${res.status}`);
+        dndRouteLayer.addLayer(pl);
+        pl.bringToBack();
+      }
 
-    const data = await res.json();
-    const coords = data?.routes?.[0]?.geometry?.coordinates;
-    if (!Array.isArray(coords) || coords.length < 2) throw new Error("OSRM returned no geometry");
+      if (!dndRouteVisible) {
+        map.removeLayer(dndRouteLayer);
+      } else {
+        dndRouteLayer.addTo(map);
+      }
+    }
 
-    // Convert [lon,lat] -> [lat,lon]
-    const leg = coords.map(([lon, lat]) => [lat, lon]);
+    function setDndRouteVisibility(visible){
+      dndRouteVisible = visible;
 
-    // Avoid duplicating the junction point between legs
-    if (out.length) leg.shift();
+      const btn = document.getElementById("btnToggleDndRoute");
+      btn.textContent = `DnD route: ${dndRouteVisible ? "On" : "Off"}`;
+      btn.classList.toggle("dndOn", dndRouteVisible);
 
-    out.push(...leg);
-  }
+      if (dndRouteVisible) dndRouteLayer.addTo(map);
+      else map.removeLayer(dndRouteLayer);
+    }
 
-  return out;
-}
+    // Build routes immediately (async)
+    createOrUpdateDndRoutes();
 
-async function createOrUpdateMomRoutes(){
-  momRouteLayer.clearLayers();
+    // =========================
+    // DnD stop day badges (stagger when multiple days share a track)
+    // =========================
+    const dndStops = events.filter(e => e?.type === "dragdrive" && e.locationId);
+    const dndPinCountByLoc = Object.create(null);
 
-  const dragStops = events.filter(e => e?.type === "dragdrive" && e.locationId);
-
-  // group by seriesId (best) or fallback to eventName
-  const bySeries = new Map();
-  for (const e of dragStops){
-    const key = seriesKeyFor(e);
-    if (!key) continue;
-    if (!bySeries.has(key)) bySeries.set(key, []);
-    bySeries.get(key).push(e);
-  }
-
-  for (const [key, list] of bySeries){
-    // sort within the series (momDay if present, else by date)
-    list.sort((a,b) => (a.momDay ?? 999) - (b.momDay ?? 999));
-
-    const latlngs = list
-      .map(s => locations[s.locationId])
-      .filter(Boolean)
-      .map(l => [l.lat, l.lon]);
-
-    if (latlngs.length < 2) continue;
-
-    let routeLatLngs = latlngs;
-    try {
-      routeLatLngs = await buildRoadRoute(latlngs);
-    } catch (err) {
-  console.warn("Road route failed; using straight lines instead:", err);
-}
-
-    const pl = L.polyline(routeLatLngs, {
-      color: "#b8ff2c",
-      weight: 3,
-      opacity: 0.85
-    });
-
-    momRouteLayer.addLayer(pl);
-    pl.bringToBack();
-  }
-
-  if (!momRouteVisible) {
-    map.removeLayer(momRouteLayer);
-  } else {
-    momRouteLayer.addTo(map);
-  }
-}
-
-function setMomRouteVisibility(visible){
-  momRouteVisible = visible;
-
-  const btn = document.getElementById("btnToggleMomLines");
-  btn.textContent = `Drag & Drive Est. Route: ${momRouteVisible ? "On" : "Off"}`;
-  btn.classList.toggle("momOn", momRouteVisible);
-
-  if (momRouteVisible) momRouteLayer.addTo(map);
-  else map.removeLayer(momRouteLayer);
-}
-
-createOrUpdateMomRoutes();
-
-    const momStops = events.filter(e => e?.type === "dragdrive" && e.locationId);
-
-
-    // Add MOM stop badges at the SAME coordinates
-    for (const stop of momStops){
+    for (const stop of dndStops){
       const loc = locations[stop.locationId];
       if (!loc) continue;
 
+      const idx = dndPinCountByLoc[stop.locationId] || 0;
+      dndPinCountByLoc[stop.locationId] = idx + 1;
+
+      // Stagger pattern: alternate a bit right/left, then stack upward
+      const pinX = 10 + (idx % 2) * 18;                 // 10px, 28px, 10px, 28px...
+      const pinY = -18 - Math.floor(idx / 2) * 16;      // -18px, -18px, -34px, -34px...
+
       const labelIcon = L.divIcon({
         className: "",
-        html: `<div class="momPin">${stop.momDay}/${stop.momTotal}</div>`
+        html: `<div class="dndPin" style="--pinX:${pinX}px; --pinY:${pinY}px;">${stop.dndDay}/${stop.dndTotal}</div>`
       });
 
       const labelMarker = L.marker([loc.lat, loc.lon], {
@@ -1700,8 +1670,7 @@ createOrUpdateMomRoutes();
 
         const locName = locations[evt.locationId]?.name || evt.locationId;
         const payout = evt.payout || "TBD";
-        const isMom = evt.type === "dragdrive";
-        const momTag = isMom && evt.momDay && evt.momTotal ? `MOM ${evt.momDay}/${evt.momTotal}` : "Drag & Drive";
+        const isDnd = evt.type === "dragdrive";
 
         const pageUrl = normalizeUrl(evt.eventPageUrl || "");
         const pageLink = pageUrl
@@ -1712,11 +1681,11 @@ createOrUpdateMomRoutes();
           <div class="item" data-id="${escapeHtml(evt.id)}">
             <div class="itemTop">
               <div class="itemTitle">
-                <span style="color:${isMom ? "var(--mom)" : "var(--accent)"}; font-weight:600">${escapeHtml(evt.date)}</span>
+                <span style="color:${isDnd ? "var(--dnd)" : "var(--accent)"}; font-weight:600">${escapeHtml(evt.date)}</span>
                 — ${escapeHtml(evt.eventName)}
-                ${isMom && evt.momDay ? `<span class="miniTag mom" style="margin-left:8px">${escapeHtml(momTag)}</span>` : ""}
+                ${isDnd && evt.dndDay ? `<span class="miniTag dnd" style="margin-left:8px">DnD ${escapeHtml(evt.dndDay)}/${escapeHtml(evt.dndTotal)}</span>` : ""}
               </div>
-              <div class="tag ${isMom ? "mom" : ""}">${isMom ? "MOM" : "Race"}</div>
+              <div class="tag ${isDnd ? "dnd" : ""}">${isDnd ? "DnD" : "Race"}</div>
             </div>
             <div class="meta">
               ${escapeHtml(locName)}<br/>
@@ -1793,8 +1762,8 @@ createOrUpdateMomRoutes();
       setTimeout(() => map.invalidateSize(), 150);
     });
 
-    document.getElementById("btnToggleMomLines").addEventListener("click", () => {
-      setMomRouteVisibility(!momRouteVisible);
+    document.getElementById("btnToggleDndRoute").addEventListener("click", () => {
+      setDndRouteVisibility(!dndRouteVisible);
     });
 
     // =========================
@@ -1856,7 +1825,7 @@ createOrUpdateMomRoutes();
 
   // Boot the app
   startApp();
-</script>
+  </script>
 
   <!-- Netlify form detection stubs (do not remove) -->
   <form name="event-submission" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
@@ -1887,25 +1856,3 @@ createOrUpdateMomRoutes();
   </form>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
