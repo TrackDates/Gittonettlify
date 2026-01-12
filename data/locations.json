@@ -82,7 +82,25 @@
       "id": "Gainesville Raceway",
       "name": "Gainesville Raceway",
       "lat": 29.758,
-      "lon": 82.2753
+      "lon": -82.2753
+    },
+    {
+      "lat": 31.0646,
+      "lon": -83.3962,
+      "id": "South Georgia Motorsports Park",
+      "name": "South Georgia Motorsports Park"
+    },
+    {
+      "id": "Bradenton Motorsports Park",
+      "name": "Bradenton Motorsports Park",
+      "lat": 37.0625,
+      "lon": -95.67706
+    },
+    {
+      "id": "Orlando Speed World Dragway",
+      "name": "Orlando Speed World Dragway",
+      "lat": 28.538541,
+      "lon": -81.090233
     }
   ]
 }
