@@ -101,6 +101,24 @@
       "name": "Orlando Speed World Dragway",
       "lat": 28.538541,
       "lon": -81.090233
+    },
+    {
+      "id": "SRCA Dragstrip",
+      "lat": 38.36,
+      "lon": -98.86,
+      "name": "SRCA Dragstrip"
+    },
+    {
+      "id": "Kearney Raceway Park",
+      "name": "Kearney Raceway Park",
+      "lat": 40.7283,
+      "lon": -98.9893
+    },
+    {
+      "id": "Pueblo Motorsports Park",
+      "name": "Pueblo Motorsports Park",
+      "lat": 38.306389,
+      "lon": -104.678333
     }
   ]
 }
