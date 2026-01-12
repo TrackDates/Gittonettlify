@@ -60,23 +60,23 @@
       "eventPageUrl": "https://www.sickthemagazine.com/sick-week",
       "stops": [
         {
-          "date": "Gainesville Raceway",
+          "date": "Feb 2",
           "locationId": "Gainesville Raceway"
         },
         {
-          "date": "South Georgia Motorsports Park",
+          "date": "Feb 3",
           "locationId": "South Georgia Motorsports Park"
         },
         {
-          "date": "Bradenton Motorsports Park",
+          "date": "Feb 5",
           "locationId": "Bradenton Motorsports Park"
         },
         {
-          "date": "Orlando Speed World Dragway",
+          "date": "Feb 6",
           "locationId": "Orlando Speed World Dragway"
         },
         {
-          "date": "Gainesville Raceway",
+          "date": "Feb 7",
           "locationId": "Gainesville Raceway"
         }
       ],
