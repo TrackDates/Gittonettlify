@@ -110,6 +110,59 @@
           "url": "https://www.mickeythompsontires.com/"
         }
       ]
+    },
+    {
+      "id": "Rocky Mountain Race Week",
+      "title": "Rocky Mountain Race Week",
+      "eventPageUrl": "https://www.rockymountainraceweek.com/",
+      "sponsors": [
+        {
+          "name": "Motion Raceworks",
+          "url": "https://motionraceworks.com/en-ca?gclid=CjwKCAiA_6yfBhBNEiwAkmXy50Zl-oZiQ-WhJv_inf6OetzIAgM3z5Ss5V7xbjFJzuV_JR3SOiihKBoC7GEQAvD_BwE"
+        },
+        {
+          "url": "https://www.sickthemagazine.com/",
+          "name": "Sick The Mag"
+        },
+        {
+          "name": "Brian Tooley Racing",
+          "url": "https://briantooleyracing.com/"
+        },
+        {
+          "name": "1320 video",
+          "url": "https://1320video.com/"
+        },
+        {
+          "name": "Circle D Specialties",
+          "url": "https://www.circledspecialties.com/"
+        }
+      ],
+      "stops": [
+        {
+          "date": "June 6",
+          "locationId": "SRCA Dragstrip"
+        },
+        {
+          "date": "June 7",
+          "locationId": "Kearney Raceway Park"
+        },
+        {
+          "date": "June 8",
+          "locationId": "-Drive Day-"
+        },
+        {
+          "date": "June 9-10",
+          "locationId": "Pueblo Motorsports Park"
+        },
+        {
+          "date": "June 11",
+          "locationId": "-Drive Day-"
+        },
+        {
+          "date": "June 12",
+          "locationId": "SRCA Dragstrip"
+        }
+      ]
     }
   ]
 }
