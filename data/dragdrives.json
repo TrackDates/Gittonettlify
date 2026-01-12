@@ -68,6 +68,10 @@
           "locationId": "South Georgia Motorsports Park"
         },
         {
+          "date": "Feb 4",
+          "locationId": "-Drive Day-"
+        },
+        {
           "date": "Feb 5",
           "locationId": "Bradenton Motorsports Park"
         },
@@ -78,10 +82,6 @@
         {
           "date": "Feb 7",
           "locationId": "Gainesville Raceway"
-        },
-        {
-          "date": "Feb 4",
-          "locationId": "-Drive Day-"
         }
       ],
       "sponsors": [
