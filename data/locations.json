@@ -77,6 +77,12 @@
       "name": "Yellowstone Drag Strip (Acton, MT)",
       "lat": 45.934,
       "lon": -108.7543
+    },
+    {
+      "id": "Gainesville Raceway",
+      "name": "Gainesville Raceway",
+      "lat": 29.758,
+      "lon": 82.2753
     }
   ]
 }
