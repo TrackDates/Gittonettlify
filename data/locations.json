@@ -119,6 +119,30 @@
       "name": "Pueblo Motorsports Park",
       "lat": 38.306389,
       "lon": -104.678333
+    },
+    {
+      "id": "Route 66 Raceway",
+      "name": "Route 66 Raceway, Joliet, IL",
+      "lat": 41.46451,
+      "lon": -88.07452
+    },
+    {
+      "id": "Byron Dragway",
+      "name": "Byron Dragway, Byron, IL",
+      "lat": 42.11795,
+      "lon": -89.27245
+    },
+    {
+      "id": "Cordova Dragway",
+      "name": "Cordova Dragway, Cordova, IL",
+      "lat": 41.71727,
+      "lon": -90.29855
+    },
+    {
+      "id": "World Wide Technology Raceway",
+      "name": "World Wide Technology Raceway, St. Louis, MO",
+      "lat": 38.65083,
+      "lon": -90.13538
     }
   ]
 }
