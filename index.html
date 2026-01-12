@@ -1597,9 +1597,13 @@
       const idx = dndPinCountByLoc[stop.locationId] || 0;
       dndPinCountByLoc[stop.locationId] = idx + 1;
 
-      // Stagger pattern: alternate a bit right/left, then stack upward
-      const pinX = 10 + (idx % 2) * 18;                 // 10px, 28px, 10px, 28px...
-      const pinY = -18 - Math.floor(idx / 2) * 16;      // -18px, -18px, -34px, -34px...
+     // Stack vertically so multiple DnD days at the same track don't overlap.
+// Day 1 sits higher, last day(s) stack underneath.
+const pinX = 14;               // keep it slightly right of the track marker
+const baseY = -48;             // first badge above the marker
+const stepY = 20;              // each next badge drops down
+const pinY = baseY + (idx * stepY);
+
 
       const labelIcon = L.divIcon({
         className: "",
@@ -1856,4 +1860,5 @@
   </form>
 </body>
 </html>
+
 
