@@ -163,6 +163,39 @@
           "locationId": "SRCA Dragstrip"
         }
       ]
+    },
+    {
+      "id": "Drag Week",
+      "title": "Hot Rod Drag Week",
+      "eventPageUrl": "https://www.hotrod.com/events/2026-hot-rod-drag-week-schedule-route-66-raceway",
+      "stops": [
+        {
+          "date": "Sept 14",
+          "locationId": "Route 66 Raceway"
+        },
+        {
+          "date": "Sept 15",
+          "locationId": "Byron Dragway"
+        },
+        {
+          "date": "Sept 16",
+          "locationId": "Cordova Dragway"
+        },
+        {
+          "date": "Sept 17",
+          "locationId": "World Wide Technology Raceway"
+        },
+        {
+          "date": "Sept 18",
+          "locationId": "Route 66 Raceway"
+        }
+      ],
+      "sponsors": [
+        {
+          "name": "Hot Rod",
+          "url": "https://www.hotrod.com/"
+        }
+      ]
     }
   ]
 }
