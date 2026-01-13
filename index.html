@@ -1293,23 +1293,25 @@
     // =========================
     const map = L.map("map", { zoomControl: true, preferCanvas: true });
 
-    // Base: dark with higher contrast (no labels)
-    const baseTiles = L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
-      {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        className: "base-tiles"
-      }
-    ).addTo(map);
+    // Base: LIGHT (no labels)
+const baseTiles = L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
+  {
+    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+    className: "base-tiles"
+  }
+).addTo(map);
 
-    const labelTiles = L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",
-      {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        className: "label-tiles",
-        opacity: 0.95
-      }
-    ).addTo(map);
+// Labels layer (kept separate so you can tune opacity/contrast)
+const labelTiles = L.tileLayer(
+  "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
+  {
+    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+    className: "label-tiles",
+    opacity: 0.90
+  }
+).addTo(map);
+
 
     // Group events by location
     const eventsByLocation = {};
@@ -1860,6 +1862,7 @@ const pinY = baseY + (idx * stepY);
   </form>
 </body>
 </html>
+
 
 
 
