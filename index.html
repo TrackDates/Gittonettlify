@@ -51,14 +51,15 @@
     }
 
     /* Tune base map contrast */
-    #map .base-tiles{
-      filter: contrast(1.28) brightness(1.28) saturate(1.10);
-    }
+    /* Light basemap tuning */
+#map .base-tiles{
+  filter: contrast(1.08) brightness(1.06) saturate(1.05);
+}
 
-    /* Brighten labels + boundaries layer */
-    #map .label-tiles{
-      filter: brightness(1.60) contrast(1.40);
-    }
+/* Keep labels crisp without blasting them */
+#map .label-tiles{
+  filter: contrast(1.15) brightness(0.98);
+}
 
     .topbar{
       display:flex;
@@ -1862,6 +1863,7 @@ const pinY = baseY + (idx * stepY);
   </form>
 </body>
 </html>
+
 
 
 
