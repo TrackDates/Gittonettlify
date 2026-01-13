@@ -52,15 +52,16 @@
 
     /* Tune base map contrast */
     /* Light basemap tuning */
+/* Dark basemap, but with better separation (water not so dark) */
 #map .base-tiles{
-  filter: contrast(1.08) brightness(1.06) saturate(1.05);
+  filter: brightness(1.18) contrast(1.22) saturate(1.08);
 }
 
-/* Keep labels crisp without blasting them */
+/* Labels: crisp, not glowing */
 #map .label-tiles{
-  filter: contrast(1.15) brightness(0.98);
+  filter: brightness(1.30) contrast(1.25);
 }
-
+    
     .topbar{
       display:flex;
       align-items:center;
@@ -1863,6 +1864,7 @@ const pinY = baseY + (idx * stepY);
   </form>
 </body>
 </html>
+
 
 
 
